@@ -1,0 +1,45 @@
+defining "subsquares"
+[s0][s1][s2]
+[s3][s4][s5]
+[s6][s7][s8]
+s0 = [0, 0]
+s1 = [1, 0]
+s2 = [2, 0]
+s3 = [0, 1]
+s4 = [1, 1]
+s5 = [2, 1]
+s6 = [0, 2]
+s7 = [1, 2]
+s8 = [2, 2]
+s@[x, y] is mutually exclusive along x and y
+i.e. s0 != s1, s0 != s2, s1 != s2, and
+s0 != s3, s0 != s6, s3 != s6
+and so on.
+
+each s = n[9] such that
+[n0][n1][n2]
+[n3][n4][n5]
+[n6][n7][n8]
+
+as such, each s(x) has 9! arrangements of the numbers 1-9.
+therefore each s(x) < i32_max, && precomputation of all possible squares is feasible.
+
+we can use this precomputation to verify the arrangement of the squares per row/column rules.
+e.g. row 0 identity:
+[n][n][n]
+[u][u][u]
+[u][u][u]
+where n is in some set s, and u is undefined (within constraints of valid squares)
+in a valid board {b}, all squares [s] have unique row identity when in a given row,
+and a unique column identity when in a given column.
+each set of three can be identified as one of 9C3, or
+9!/(9-3)!3!, or 84, or 0101 0100 (aka we can represent the identity of any column or row
+using 8 bits or fewer)
+
+each square S can be identified by values of 4 identities: row_0 row_1 col_0 col_1
+(the third row and column are each implied by the values of 0,1)
+
+what needs to be developed next is the path taken:
+-- generate all the squares?
+-- devise additional associations?
+-- solutions, etc.

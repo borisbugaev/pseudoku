@@ -8,6 +8,7 @@ pseudo-intellectually solving sudoku
 see definatrics.txt
 */
 
+
 int main(int argc, char** argv)
 {
 

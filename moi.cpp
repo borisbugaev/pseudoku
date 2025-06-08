@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <chrono>
 
+constexpr int SIZE{9};
 /*
 Program to solve sudoku, using human strategies
 "The way the author would solve a sudoku"
@@ -10,29 +11,122 @@ Program to solve sudoku, using human strategies
 
 /*
 reference board:
-00 01 02 | 09 10 11 | 18 19 20
-03 04 05 | 12 13 14 | 21 22 23
-06 07 08 | 15 16 17 | 24 25 26
+00 01 02 | 27 28 29 | 54 55 56
+03 04 05 | 30 31 32 | 57 58 59
+06 07 08 | 33 34 35 | 60 61 62
 ---------x----------x---------
-27 28 29 | 36 37 38 | 45 46 47
-30 31 32 | 39 40 41 | 48 49 50
-33 34 35 | 42 43 44 | 51 52 53
+09 10 11 | 36 37 38 | 63 64 65
+12 13 14 | 39 40 41 | 66 67 68
+15 16 17 | 42 43 44 | 69 70 71
 ---------x----------x---------
-54 55 56 | 63 64 65 | 72 73 74
-57 58 59 | 66 67 68 | 75 76 77
-60 61 62 | 69 70 71 | 78 79 80
+18 19 20 | 45 46 47 | 72 73 74
+21 22 23 | 48 49 50 | 75 76 77
+24 25 26 | 51 52 53 | 78 79 80
 */
 
-uint8_t candidates(int8_t locale, int8_t* board)
+constexpr int my_square(int locale)
+{
+    return locale / SIZE;
+}
+
+constexpr int my_row(int locale)
+{
+    return ((locale % SIZE) / 3) + ((locale / SIZE) * 3);
+}
+
+constexpr int my_col(int locale)
+{
+    return (locale % 3) + (locale / 27);
+}
+
+uint8_t set_parse_row(uint8_t* board, int row)
+{
+    uint8_t set_row{0b00000000};
+    int row_start{row * 3};
+    int row_indices[9]
+    {   
+        row_start,
+        row_start + 1,
+        row_start + 2,
+        row_start + 27,
+        row_start + 27 + 1,
+        row_start + 27 + 2,
+        row_start + 27 + 27,
+        row_start + 27 + 27 + 1,
+        row_start + 27 + 27 + 2};
+    for (int i = 0; i < SIZE; i++)
+    {
+        set_row = set_row | board[row_indices[i]];
+    }
+    return set_row;
+}
+
+uint8_t set_parse_col(uint8_t* board, int col)
+{
+    uint8_t set_col{0b00000000};
+    int col_start{col/3 * 24 + col};
+    int col_end{SIZE * 3 + col_start};
+    for (int i = col_start; i < col_end; i += 3)
+    {
+        set_col = set_col | (1 << board[i]);
+    }
+    return set_col;
+}
+
+uint8_t set_parse_sqr(uint8_t* board, int sqr)
+{
+    uint8_t set_sqr{0b00000000};
+    int start_sqr{sqr * SIZE};
+    int end_sqr{start_sqr + SIZE};
+    for (int i = start_sqr; i < end_sqr; i++)
+    {
+        set_sqr = set_sqr | (1 << board[i]);
+    }
+    return set_sqr;
+}
+
+uint8_t* all_col_sets(uint8_t* board)
+{
+    uint8_t* cols{};
+    for (int i = 0; i < SIZE; i++)
+    {
+        cols[i] = set_parse_col(board, i);
+    }
+    return cols;
+}
+
+uint8_t* all_row_sets(uint8_t* board)
+{
+    uint8_t* rows{}; 
+    for (int i = 0; i < SIZE; i++)
+    {
+        rows[i] = set_parse_row(board, i);
+    }
+    return rows;
+}
+
+uint8_t* all_sqr_sets(uint8_t* board)
+{
+    uint8_t* sqrs{};
+    for (int i = 0; i < SIZE; i++)
+    {
+        sqrs[i] = set_parse_sqr(board, i);
+    }
+    return sqrs;
+}
+
+uint8_t candidates(int locale, uint8_t* board)
 {
     uint8_t can{0b11111111};
-
 
     return can;
 }
 
 int main(int argc, char** argv)
 {
-    int8_t* board[81]{};
+    uint8_t* board[81]{};
+    uint8_t* square[SIZE]{};
+    uint8_t* row[SIZE]{};
+    uint8_t* column[SIZE]{};
     return 0;
 }

@@ -24,21 +24,33 @@ reference board:
 24 25 26 | 51 52 53 | 78 79 80
 */
 
+/*
+calc square of given index
+*/
 constexpr int my_square(int locale)
 {
     return locale / SIZE;
 }
 
+/*
+calc row of index
+*/
 constexpr int my_row(int locale)
 {
     return ((locale % SIZE) / 3) + ((locale / SIZE) * 3);
 }
 
+/*
+calc column of index
+*/
 constexpr int my_col(int locale)
 {
     return (locale % 3) + (locale / 27);
 }
 
+/*
+calc set of int in given row
+*/
 uint8_t set_parse_row(uint8_t* board, int row)
 {
     uint8_t set_row{0b00000000};
@@ -61,6 +73,9 @@ uint8_t set_parse_row(uint8_t* board, int row)
     return set_row;
 }
 
+/*
+calc set of int in given column
+*/
 uint8_t set_parse_col(uint8_t* board, int col)
 {
     uint8_t set_col{0b00000000};
@@ -73,6 +88,9 @@ uint8_t set_parse_col(uint8_t* board, int col)
     return set_col;
 }
 
+/*
+calc set of int in given square
+*/
 uint8_t set_parse_sqr(uint8_t* board, int sqr)
 {
     uint8_t set_sqr{0b00000000};
@@ -85,6 +103,9 @@ uint8_t set_parse_sqr(uint8_t* board, int sqr)
     return set_sqr;
 }
 
+/*
+calc set of int for all columns
+*/
 uint8_t* all_col_sets(uint8_t* board)
 {
     uint8_t* cols{};
@@ -95,6 +116,9 @@ uint8_t* all_col_sets(uint8_t* board)
     return cols;
 }
 
+/*
+calc set of int for all rows
+*/
 uint8_t* all_row_sets(uint8_t* board)
 {
     uint8_t* rows{}; 
@@ -105,6 +129,9 @@ uint8_t* all_row_sets(uint8_t* board)
     return rows;
 }
 
+/*
+calc set of int for all squares
+*/
 uint8_t* all_sqr_sets(uint8_t* board)
 {
     uint8_t* sqrs{};
@@ -115,11 +142,16 @@ uint8_t* all_sqr_sets(uint8_t* board)
     return sqrs;
 }
 
+/*
+calc valid values at given index
+*/
 uint8_t candidates(int locale, uint8_t* board)
 {
     uint8_t can{0b11111111};
-
-    return can;
+    return can 
+    & ~set_parse_col(board, my_col(locale)) 
+    & ~set_parse_row(board, my_row(locale))
+    & ~set_parse_sqr(board, my_square(locale));
 }
 
 int main(int argc, char** argv)

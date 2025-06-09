@@ -4,6 +4,7 @@
 #include <chrono>
 
 constexpr int SIZE{9};
+constexpr int B_SIZE{SIZE*SIZE};
 /*
 Program to solve sudoku, using human strategies
 "The way the author would solve a sudoku"
@@ -55,7 +56,7 @@ uint8_t set_parse_row(uint8_t* board, int row)
 {
     uint8_t set_row{0b00000000};
     int row_start{row * 3};
-    int row_indices[9]
+    int row_indices[SIZE]
     {   
         row_start,
         row_start + 1,
@@ -156,9 +157,21 @@ uint8_t candidates(int locale, uint8_t* board)
 
 int main(int argc, char** argv)
 {
-    uint8_t* board[81]{};
-    uint8_t* square[SIZE]{};
-    uint8_t* row[SIZE]{};
-    uint8_t* column[SIZE]{};
+    uint8_t board[B_SIZE]{};
+    uint8_t board_c[B_SIZE]{};
+    uint8_t square[SIZE]{};
+    uint8_t row[SIZE]{};
+    uint8_t column[SIZE]{};
+
+    // initialize board to zeroes
+    for (int i = 0; i < B_SIZE; i++)
+    {
+        board[i] = 0;
+    }
+    // with some initial values set on the board[]
+    for (int i = 0; i < B_SIZE; i++)
+    {
+        board_c[i] = candidates(i, board);
+    }
     return 0;
 }

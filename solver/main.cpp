@@ -8,7 +8,8 @@ const int EXP_ARGC{2};
 const std::string EXP_ARGSV[EXP_ARGC]{"SELF", "INPUT FILE"};
 const std::string ARG_TYPE{"ENTER NAME OF "};
 
-unsigned short candidates(unsigned char locale, std::array<unsigned short, konst::bs> board);
+unsigned short candidates(unsigned char locale, 
+    std::array<unsigned short, konst::bs> board);
 void draw_board(std::array<unsigned short, konst::bs> b);
 void draw_candidates(unsigned short candidat);
 std::array<unsigned short, konst::bs> init_blank();
@@ -50,7 +51,6 @@ int main(int argc, char** argv)
     std::cout << pseud::hint;
     std::cout << pseud::prompt;
     std::cin >> inputstr;
-    //std::cout << "\x1b[1A" << "\x1b[2K";
     while (!inputstr.compare(".exit"))
     {
         searchfor = std::stoi(inputstr);

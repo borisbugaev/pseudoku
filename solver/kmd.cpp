@@ -1,9 +1,18 @@
+#pragma once
 #include "sudokonst.h"
 #include <array>
 #include <string>
-#include <iostream>
+//#include <iostream>
 
-std::array<unsigned short, konst::bs> kommand(std::string input, std::array<unsigned short, konst::bs> board)
+unsigned short candidates(unsigned char locale, 
+    std::array<unsigned short, konst::bs> board);
+void draw_board(std::array<unsigned short, konst::bs> b);
+void draw_candidates(unsigned short candidat);
+
+std::array<unsigned short, konst::bs> kommand(
+    std::string input, 
+    std::array<unsigned short, konst::bs> board,
+    std::array<unsigned short, konst::bs> c_board)
 {
     if (input.compare(komm::usr_exit))
     {

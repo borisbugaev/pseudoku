@@ -89,7 +89,8 @@ constexpr unsigned char my_col(unsigned char locale)
 /*
 calc set of int in given row
 */
-unsigned short set_parse_row(std::array<unsigned short, konst::bs> board, unsigned char row)
+unsigned short set_parse_row(std::array<unsigned short, konst::bs> board, 
+    unsigned char row)
 {
     unsigned short set_row{0x0};
     long row_start{row * 3};
@@ -114,7 +115,8 @@ unsigned short set_parse_row(std::array<unsigned short, konst::bs> board, unsign
 /*
 calc set of int in given column
 */
-unsigned short set_parse_col(std::array<unsigned short, konst::bs> board, unsigned char col)
+unsigned short set_parse_col(std::array<unsigned short, konst::bs> board, 
+    unsigned char col)
 {
     unsigned short set_col{0x0};
     long col_start{col/3 * 24 + col};
@@ -129,7 +131,8 @@ unsigned short set_parse_col(std::array<unsigned short, konst::bs> board, unsign
 /*
 calc set of int in given square
 */
-unsigned short set_parse_sqr(std::array<unsigned short, konst::bs> board, unsigned char sqr)
+unsigned short set_parse_sqr(std::array<unsigned short, konst::bs> board, 
+    unsigned char sqr)
 {
     unsigned short set_sqr{0x0};
     long start_sqr{sqr * konst::sz};
@@ -144,7 +147,8 @@ unsigned short set_parse_sqr(std::array<unsigned short, konst::bs> board, unsign
 /*
 calc set of int for all columns
 */
-std::array<unsigned short, konst::bs> all_col_sets(std::array<unsigned short, konst::bs> board)
+std::array<unsigned short, konst::bs> all_col_sets(
+    std::array<unsigned short, konst::bs> board)
 {
     std::array<unsigned short, konst::bs> cols{};
     for (unsigned char i = 0; i < konst::sz; i++)
@@ -157,7 +161,8 @@ std::array<unsigned short, konst::bs> all_col_sets(std::array<unsigned short, ko
 /*
 calc set of int for all rows
 */
-std::array<unsigned short, konst::bs> all_row_sets(std::array<unsigned short, konst::bs> board)
+std::array<unsigned short, konst::bs> all_row_sets(
+    std::array<unsigned short, konst::bs> board)
 {
     std::array<unsigned short, konst::bs> rows{}; 
     for (unsigned char i = 0; i < konst::sz; i++)
@@ -170,7 +175,8 @@ std::array<unsigned short, konst::bs> all_row_sets(std::array<unsigned short, ko
 /*
 calc set of int for all squares
 */
-std::array<unsigned short, konst::bs> all_sqr_sets(std::array<unsigned short, konst::bs> board)
+std::array<unsigned short, konst::bs> all_sqr_sets(
+    std::array<unsigned short, konst::bs> board)
 {
     std::array<unsigned short, konst::bs> sqrs{};
     for (unsigned char i = 0; i < konst::sz; i++)
@@ -183,7 +189,8 @@ std::array<unsigned short, konst::bs> all_sqr_sets(std::array<unsigned short, ko
 /*
 calc valid values at given index
 */
-unsigned short candidates(unsigned char locale, std::array<unsigned short, konst::bs> board)
+unsigned short candidates(unsigned char locale, 
+    std::array<unsigned short, konst::bs> board)
 {
     unsigned short can{0x1ff};
     return can 

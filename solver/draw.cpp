@@ -1,3 +1,5 @@
+#include "sudokonst.h"
+#include <array>
 #include <iostream>
 
 /*
@@ -61,7 +63,7 @@ void draw_candidates(unsigned short candidat)
 draw board as it should appear
 sort of evil (c'est tres literal)
 */
-void draw_board(unsigned short* b)
+void draw_board(std::array<unsigned short, konst::bs> b)
 {
     std::cout << b[0]  << ' ' << b[1]  << ' ' << b[2]  << " | ";
     std::cout << b[27] << ' ' << b[28] << ' ' << b[29] << " | ";

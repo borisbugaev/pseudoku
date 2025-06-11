@@ -100,12 +100,12 @@ unsigned short set_parse_row(std::array<unsigned short, konst::bs> board,
         row_start,
         row_start + 1,
         row_start + 2,
-        row_start + 27,
-        row_start + 27 + 1,
-        row_start + 27 + 2,
-        row_start + 27 + 27,
-        row_start + 27 + 27 + 1,
-        row_start + 27 + 27 + 2};
+        row_start + konst::sb,
+        row_start + konst::sb + 1,
+        row_start + konst::sb + 2,
+        row_start + konst::sb * 2,
+        row_start + konst::sb * 2 + 1,
+        row_start + konst::sb * 2 + 2};
     for (unsigned char i = 0; i < konst::sz; i++)
     {
         set_row = set_row | (1 << (board[row_indices[i]] - 1));

@@ -18,11 +18,14 @@ void draw_board(std::array<unsigned short, konst::bs> b);
 void draw_candidates(unsigned short candidat);
 std::array<unsigned short, konst::bs> init_blank();
 std::array<unsigned short, konst::bs> init_from_file(std::string filename);
+std::array<unsigned short, konst::bs> init_can(
+    std::array<unsigned short, konst::bs> board
+);
 
 int main(int argc, char** argv)
 {
     std::array<unsigned short, konst::bs> board{};
-    std::array<unsigned short, konst::bs> board_c{};
+    std::array<unsigned short, konst::bs> c_board{};
     
     //boilerplate filename input init
     std::string input_arg[EXP_ARGC];
@@ -41,23 +44,27 @@ int main(int argc, char** argv)
     }
     draw_board(board);
     // with board initialized
-    for (unsigned char i = 0; i < konst::bs; i++)
-    {
-        board_c[i] = candidates(i, board);
-        if (board[i] != 0)
-        {
-            board_c[i] = 0;
-        }
-    }
+    c_board = init_can(board);
     std::array<unsigned short, konst::bs> tboard;
-    short searchfor{};
+    bool usr_quit{false};
     std::string inputstr{};
     std::cout << pseud::hint;
     std::cout << pseud::prompt;
     std::cin >> inputstr;
-    while (!inputstr.compare(".exit"))
+    while (!usr_quit)
     {
-        tboard = kommand(inputstr, board, board_c);
+        tboard = kommand(inputstr, board, c_board);
+        if (tboard != board)
+        {
+            c_board = init_can(tboard);
+            board = tboard;
+        }
+        std::cout << pseud::prompt;
+        std::cin >> inputstr;
+        if (inputstr.compare("exit") == 0)
+        {
+            usr_quit = true;
+        }
     }
     return 0;
 }

@@ -121,7 +121,7 @@ unsigned short set_parse_col(std::array<unsigned short, konst::bs> board,
     unsigned short set_col{0x0};
     long col_start{col/3 * 24 + col};
     long col_end{konst::sz * 3 + col_start};
-    for (unsigned char i = col_start; i < col_end; i += 3)
+    for (long i = col_start; i < col_end; i += 3)
     {
         set_col = set_col | (1 << (board[i] - 1));
     }
@@ -137,7 +137,7 @@ unsigned short set_parse_sqr(std::array<unsigned short, konst::bs> board,
     unsigned short set_sqr{0x0};
     long start_sqr{sqr * konst::sz};
     long end_sqr{start_sqr + konst::sz};
-    for (unsigned short i = start_sqr; i < end_sqr; i++)
+    for (long i = start_sqr; i < end_sqr; i++)
     {
         set_sqr = set_sqr | (1 << (board[i] - 1));
     }

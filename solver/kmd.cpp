@@ -2,7 +2,7 @@
 #include "sudokonst.h"
 #include <array>
 #include <string>
-//#include <iostream>
+#include <iostream>
 
 unsigned short candidates(unsigned char locale, 
     std::array<unsigned short, konst::bs> board);
@@ -52,6 +52,17 @@ std::array<unsigned short, konst::bs> kommand(
     {
         // solve single square
         // insert solution into board
+        return board;
+    }
+    else if (input.compare(komm::usr_srch))
+    {
+        std::string inputstr{};
+        std::cout << "Search at index...";
+        std::cin >> inputstr;
+        short searchfor = std::stoi(inputstr);
+        std::cout << "\x1b[1A" << "\x1b[2K";
+        std::cout << "@" << inputstr << ": ";
+        draw_candidates(c_board[searchfor]);
         return board;
     }
     return board;

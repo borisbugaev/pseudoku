@@ -8,6 +8,10 @@ const int EXP_ARGC{2};
 const std::string EXP_ARGSV[EXP_ARGC]{"SELF", "INPUT FILE"};
 const std::string ARG_TYPE{"ENTER NAME OF "};
 
+std::array<unsigned short, konst::bs> kommand(
+    std::string input, 
+    std::array<unsigned short, konst::bs> board,
+    std::array<unsigned short, konst::bs> c_board);
 unsigned short candidates(unsigned char locale, 
     std::array<unsigned short, konst::bs> board);
 void draw_board(std::array<unsigned short, konst::bs> b);
@@ -45,7 +49,7 @@ int main(int argc, char** argv)
             board_c[i] = 0;
         }
     }
-
+    std::array<unsigned short, konst::bs> tboard;
     short searchfor{};
     std::string inputstr{};
     std::cout << pseud::hint;
@@ -53,12 +57,7 @@ int main(int argc, char** argv)
     std::cin >> inputstr;
     while (!inputstr.compare(".exit"))
     {
-        searchfor = std::stoi(inputstr);
-        std::cout << "@" << inputstr << ": ";
-        draw_candidates(board_c[searchfor]);
-        std::cout << "\nIndex: ";
-        std::cin >> inputstr;
-        std::cout << "\x1b[1A" << "\x1b[2K";
+        tboard = kommand(inputstr, board, board_c);
     }
     return 0;
 }

@@ -5,6 +5,8 @@
 
 /*
 intiializer for sudoku boards as 1-d array
+TODO:
+-flags for file init to change formatting
 */
 
 unsigned short candidates(unsigned char locale, 

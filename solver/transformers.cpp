@@ -2,6 +2,7 @@
 #include "sudokonst.h"
 #include <array>
 #include <iostream>
+#include <chrono>
 
 /*
 functions to be used in sudoku evaluation
@@ -49,6 +50,7 @@ std::array<unsigned short, konst::bs> try_solo_find(
     std::array<unsigned short, konst::bs> b,
     std::array<unsigned short, konst::bs> c)
 {
+    auto start = std::chrono::steady_clock::now();
     short counter{0};
     short index = find_solo(b, c);
     while (index != -1)
@@ -59,6 +61,8 @@ std::array<unsigned short, konst::bs> try_solo_find(
         c = init_can(b);
         index = find_solo(b, c);
     }
-    std::cout << "inserted " << counter << " values to board\n";
+    auto end = std::chrono::steady_clock::now();
+    std::cout << "inserted " << counter << " values to board ";
+    std::cout << "in " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << " us\n";
     return b;
 }

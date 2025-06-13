@@ -17,6 +17,9 @@ short find_solo(
 std::array<unsigned short, konst::bs> try_solo_find(
     std::array<unsigned short, konst::bs> b,
     std::array<unsigned short, konst::bs> c);
+std::array<unsigned short, konst::bs> solve_board(
+    std::array<unsigned short, konst::bs> b,
+    std::array<unsigned short, konst::bs> c);
 
 std::array<unsigned short, konst::bs> kommand(
     std::string input, 
@@ -30,7 +33,7 @@ std::array<unsigned short, konst::bs> kommand(
     else if (input.compare(komm::usr_fin) == 0)
     {
         // solve board
-        board = try_solo_find(board, c_board);
+        board = solve_board(board, c_board);
         draw_board(board);
         return board;
     }

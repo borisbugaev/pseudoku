@@ -233,7 +233,6 @@ std::array<unsigned short, konst::bs> solve_board(
             counter++;
             b = temp_b;
             c = init_can(b);
-            continue;
         }
         temp_b = try_row_find(b, c);
         if (b != temp_b)

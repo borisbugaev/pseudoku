@@ -9,8 +9,8 @@ functions to be used in sudoku evaluation
 */
 
 std::array<unsigned short, konst::bs> init_can(
-    std::array<unsigned short, konst::bs> board
-);
+    std::array<unsigned short, konst::bs> board);
+void draw_board(std::array<unsigned short, konst::bs> b);
 
 /*
 corrects for rows
@@ -121,27 +121,60 @@ short find_solo(
     return -1;
 }
 
+unsigned short s_row_set(
+    std::array<unsigned short, konst::bs> c,
+    short row_start)
+{
+    short s{0x0};
+    short row_set{0x0};
+    for (short i = 0; i < konst::sz; i++)
+    {
+        short j = get_row_pos(row_start, i);
+        if ((row_set & c[j]) != 0)
+        {
+            s |= (row_set & c[j]);
+        }
+        row_set ^= c[j];
+    }
+    row_set &= ~(row_set & s);
+    return row_set;
+}
+
 std::array<short, 0x2> row_find(
-    std::array<unsigned short, konst::bs> b,
     std::array<unsigned short, konst::bs> c)
 {
     short row_set{0x0};
     for (short i = 0; i < konst::sb; i+=3)
     {
-        for (short j = 0; j < konst::sz; j++)
-        {
-            row_set ^= c[get_row_pos(i, j)];
-        }
-        if ((row_set & (row_set - 1)) == 0)
+        row_set = s_row_set(c, i);
+        if ((row_set & (row_set - 1)) == 0 && row_set != 0)
         {
             return {row_set, i};
         }
+        row_set = 0x0;
     }
     return {0x5, 0x5};
 }
 
+unsigned short s_col_set(
+    std::array<unsigned short, konst::bs> c,
+    short col_start)
+{
+    short s{0x0};
+    short col_set{0x0};
+    for (short i = col_start; i < (konst::sb + col_start); i+=3)
+    {
+        if ((col_set & c[i]) != 0)
+        {
+            s |= (col_set & c[i]);
+        }
+        col_set ^= c[i];
+    }
+    col_set &= ~(col_set & s);
+    return col_set;
+}
+
 std::array<short, 0x2> col_find(
-    std::array<unsigned short, konst::bs> b,
     std::array<unsigned short, konst::bs> c)
 {
     short col_set{0x0};
@@ -149,14 +182,12 @@ std::array<short, 0x2> col_find(
     for (short i = 0; i < konst::sz; i++)
     {
         j = get_row_pos(0, i);
-        for (short k = j; k < (konst::sb + j); k+=3)
-        {
-            col_set ^= c[k];
-        }
-        if ((col_set & (col_set - 1)) == 0)
+        col_set = s_col_set(c, j);
+        if ((col_set & (col_set - 1)) == 0 && col_set != 0)
         {
             return {col_set, j};
         }
+        col_set = 0x0;
     }
     return {0x5, 0x5};
 }
@@ -181,7 +212,11 @@ std::array<unsigned short, konst::bs> try_row_find(
     std::array<unsigned short, konst::bs> b,
     std::array<unsigned short, konst::bs> c)
 {
-    std::array<short, 0x2> value = row_find(b, c);
+    if (!blank_check(b))
+    {
+        return b;
+    }
+    std::array<short, 0x2> value = row_find(c);
     while (value[0] != 0x5)
     {
         for (short i = 0; i < konst::sz; i++)
@@ -192,7 +227,7 @@ std::array<unsigned short, konst::bs> try_row_find(
             }
         }
         c = init_can(b);
-        value = row_find(b, c);
+        value = row_find(c);
     }
     return b;
 }
@@ -201,18 +236,22 @@ std::array<unsigned short, konst::bs> try_col_find(
     std::array<unsigned short, konst::bs> b,
     std::array<unsigned short, konst::bs> c)
 {
-    std::array<short, 0x2> value = col_find(b, c);
+    if (!blank_check(b))
+    {
+        return b;
+    }
+    std::array<short, 0x2> value = col_find(c);
     while (value[0] != 0x5)
     {
         for (short i = value[1]; i < (value[1] + konst::sb); i+=3)
         {
             if ((value[0] & c[i]) != 0)
             {
-                b[i] = equiv(c[value[0]]);
+                b[i] = equiv(value[0]);
             }
         }
         c = init_can(b);
-        value = col_find(b, c);
+        value = col_find(c);
     }
     return b;
 }
@@ -223,17 +262,21 @@ std::array<unsigned short, konst::bs> solve_board(
 {
     auto start = std::chrono::steady_clock::now();
     short counter{0};
+    short c_i{0};
     bool blank{blank_check(b)};
     std::array<unsigned short, konst::bs> temp_b;
     while (blank == true)
     {
+        c_i = counter;
         temp_b = try_solo_find(b, c);
         if (b != temp_b)
         {
             counter++;
             b = temp_b;
             c = init_can(b);
+
         }
+        blank = blank_check(b);
         temp_b = try_row_find(b, c);
         if (b != temp_b)
         {
@@ -241,6 +284,7 @@ std::array<unsigned short, konst::bs> solve_board(
             b = temp_b;
             c = init_can(b);
         }
+        blank = blank_check(b);
         temp_b = try_col_find(b, c);
         if (b != temp_b)
         {
@@ -249,6 +293,10 @@ std::array<unsigned short, konst::bs> solve_board(
             c = init_can(b);
         }
         blank = blank_check(b);
+        if (counter == c_i)
+        {
+            blank = false;
+        }
     }
     auto end = std::chrono::steady_clock::now();
     std::cout << "inserted " << counter << " values to board ";

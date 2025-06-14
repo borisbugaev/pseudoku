@@ -35,6 +35,9 @@ namespace komm
     const std::string usr_insr{"insert"};
     const std::string usr_fin{"solve"};
     const std::string usr_srch{"search"};
+    const std::string usr_solo{"solo"};
+    const std::string usr_draw{"draw"};
+    const std::string usr_col{"column"};
 }
 
 namespace algae

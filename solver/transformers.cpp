@@ -6,6 +6,7 @@
 
 /*
 functions to be used in sudoku evaluation
+TODO: square set eval, set striking
 */
 
 std::array<unsigned short, konst::bs> init_can(
@@ -119,6 +120,39 @@ short find_solo(
         }
     }
     return -1;
+}
+
+unsigned short s_sqr_set(
+    std::array<unsigned short, konst::bs> c,
+    short sqr_start)
+{
+    short s{0x0};
+    short sqr_set{0x0};
+    for (short i = sqr_start; i < (sqr_start + konst::sz); i++)
+    {
+        if ((sqr_set & c[i]) != 0)
+        {
+            s |= (sqr_set & c[i]);
+        }
+        sqr_set ^= c[i];
+    }
+    sqr_set &= ~(sqr_set & s);
+    return sqr_set;
+}
+
+std::array<short, 0x2> sqr_find(
+    std::array<unsigned short, konst::bs> c)
+{
+    short sqr_set{0x0};
+    for (short i = 0; i < konst::bs; i+=9)
+    {
+        sqr_set = s_sqr_set(c, i);
+        if ((sqr_set & (sqr_set - 1)) == 0 && sqr_set != 0)
+        {
+            return {sqr_set, i};
+        }
+    }
+    return {0x5, 0x5};
 }
 
 unsigned short s_row_set(
@@ -256,6 +290,30 @@ std::array<unsigned short, konst::bs> try_col_find(
     return b;
 }
 
+std::array<unsigned short, konst::bs> try_sqr_find(
+    std::array<unsigned short, konst::bs> b,
+    std::array<unsigned short, konst::bs> c)
+{
+    if (!blank_check(b))
+    {
+        return b;
+    }
+    std::array<short, 0x2> value = sqr_find(c);
+    while (value[0] != 0x5)
+    {
+        for (short i = value[1]; i < (value[1] + konst::sz); i++)
+        {
+            if ((value[0] & c[i]) != 0)
+            {
+                b[i] = equiv(value[0]);
+            }
+        }
+        c = init_can(b);
+        value = sqr_find(c);
+    }
+    return b;
+}
+
 std::array<unsigned short, konst::bs> solve_board(
     std::array<unsigned short, konst::bs> b,
     std::array<unsigned short, konst::bs> c)
@@ -293,13 +351,20 @@ std::array<unsigned short, konst::bs> solve_board(
             c = init_can(b);
         }
         blank = blank_check(b);
+        temp_b = try_sqr_find(b, c);
+        if (b != temp_b)
+        {
+            counter++;
+            b = temp_b;
+            c = init_can(b);
+        }
         if (counter == c_i)
         {
             blank = false;
         }
     }
     auto end = std::chrono::steady_clock::now();
-    std::cout << "inserted " << counter << " values to board ";
+    std::cout << "inserted ";
     std::cout << "in " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << " us\n";
     return b;
 }

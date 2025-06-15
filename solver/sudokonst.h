@@ -38,6 +38,8 @@ namespace komm
     const std::string usr_solo{"solo"};
     const std::string usr_draw{"draw"};
     const std::string usr_col{"column"};
+    const std::string usr_row{"row"};
+    const std::string usr_sqr{"square"};
 }
 
 namespace algae

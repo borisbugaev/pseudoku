@@ -17,15 +17,24 @@ short find_solo(
 std::array<unsigned short, konst::bs> try_solo_find(
     std::array<unsigned short, konst::bs> b,
     std::array<unsigned short, konst::bs> c);
-std::array<unsigned short, konst::bs> solve_board(
+std::array<unsigned short, konst::bs> try_sqr_find(
     std::array<unsigned short, konst::bs> b,
     std::array<unsigned short, konst::bs> c);
-std::array<unsigned short, konst::bs> try_solo_find(
+std::array<unsigned short, konst::bs> try_row_find(
+    std::array<unsigned short, konst::bs> b,
+    std::array<unsigned short, konst::bs> c);
+std::array<unsigned short, konst::bs> solve_board(
     std::array<unsigned short, konst::bs> b,
     std::array<unsigned short, konst::bs> c);
 unsigned short s_col_set(
     std::array<unsigned short, konst::bs> c,
     short col_start);
+unsigned short s_sqr_set(
+    std::array<unsigned short, konst::bs> c,
+    short sqr_start);
+unsigned short s_row_set(
+    std::array<unsigned short, konst::bs> c,
+    short row_start);
 
 std::array<unsigned short, konst::bs> kommand(
     std::string input, 
@@ -128,6 +137,36 @@ std::array<unsigned short, konst::bs> kommand(
         std::cin >> inputstr;
         short searchfor = std::stoi(inputstr);
         std::cout << s_col_set(c_board, searchfor) << '\n';
+    }
+    else if (input.compare(komm::usr_row) == 0)
+    {
+        std::string inputstr{};
+        std::cout << "Search row...";
+        std::cin >> inputstr;
+        if (inputstr.compare(komm::usr_fin) == 0)
+        {
+            return try_row_find(board, c_board);
+        }
+        else
+        {
+            short searchfor = std::stoi(inputstr);
+            std::cout << s_row_set(c_board, searchfor) << '\n';
+        }
+    }
+    else if (input.compare(komm::usr_sqr) == 0)
+    {
+        std::string inputstr{};
+        std::cout << "Search square...";
+        std::cin >> inputstr;
+        if (inputstr.compare(komm::usr_fin) == 0)
+        {
+            return try_sqr_find(board, c_board);
+        }
+        else
+        {
+            short searchfor = std::stoi(inputstr);
+            std::cout << s_sqr_set(c_board, searchfor) << '\n';
+        }
     }
     return board;
 }

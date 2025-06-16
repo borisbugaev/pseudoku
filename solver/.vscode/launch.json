@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/pdk.exe",
-            "args": [],
+            "args": ["../med_board.txt"],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],

@@ -92,7 +92,7 @@ unsigned short set_parse_row(std::array<unsigned short, konst::bs> board,
         row_start + konst::sb * 2 + 2};
     for (short i = 0; i < konst::sz; i++)
     {
-        set_row = set_row | (1 << (board[row_indices[i]] - 1));
+        set_row |= (1 << (board[row_indices[i]] - 1));
     }
     return set_row;
 }
@@ -108,7 +108,7 @@ unsigned short set_parse_col(std::array<unsigned short, konst::bs> board,
     long col_end{konst::sz * 3 + col_start};
     for (long i = col_start; i < col_end; i += 3)
     {
-        set_col = set_col | (1 << (board[i] - 1));
+        set_col |= (1 << (board[i] - 1));
     }
     return set_col;
 }
@@ -124,7 +124,7 @@ unsigned short set_parse_sqr(std::array<unsigned short, konst::bs> board,
     long end_sqr{start_sqr + konst::sz};
     for (long i = start_sqr; i < end_sqr; i++)
     {
-        set_sqr = set_sqr | (1 << (board[i] - 1));
+        set_sqr |= (1 << (board[i] - 1));
     }
     return set_sqr;
 }

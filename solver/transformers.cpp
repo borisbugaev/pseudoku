@@ -106,17 +106,16 @@ unsigned short set_xor_search(
 {
     short add_only_set{0x0}, my_set{0x0};
     const short i_col{0x3}, i_els{0x1}, f_row{0x0};
-    short by{(type == 'c') ? i_col : i_els}, from{(type == 'r') ? f_row : start};
-    for (short i = from; i < (from + konst::sz); i+=by)
+    short by{(type == 'c') ? i_col : i_els};
+    short from{(type == 'r') ? f_row : start};
+    short buf{(type == 'c') ? konst::sb : konst::sz};
+    for (short i = from; i < (from + buf); i+=by)
     {
         const short j{(type == 'r') ? grp(start, i) : i};
-        if ((my_set & c[j]) != 0)
-        {
-            add_only_set |= my_set & c[j];
-        }
+        add_only_set |= my_set & c[j];
         my_set ^= c[j];
     }
-    return my_set & ~(my_set & add_only_set); //n-input 'true' xor
+    return my_set & ~add_only_set; //n-input 'true' xor
 }
 
 std::array<short, 0x2> sqr_find(
@@ -128,14 +127,7 @@ std::array<short, 0x2> sqr_find(
         sqr_set = set_xor_search(c, i, 's');
         if (sqr_set != 0)
         {
-            if ((sqr_set & (sqr_set - 1)) == 0)
-            {
-                return {sqr_set, i};
-            }
-            else
-            {
-                return {get_1st_mapped_short(sqr_set), i};
-            }
+            return {get_1st_mapped_short(sqr_set), i};
         }
         sqr_set = 0x0;
     }
@@ -150,15 +142,8 @@ std::array<short, 0x2> row_find(
     {
         row_set = set_xor_search(c, i, 'r');
         if (row_set != 0)
-        {    
-            if ((row_set & (row_set - 1)) == 0)
-            {
-                return {row_set, i};
-            }
-            else
-            {
-                return {get_1st_mapped_short(row_set), i};
-            }
+        {
+            return {get_1st_mapped_short(row_set), i};
         }
         row_set = 0x0;
     }
@@ -175,14 +160,7 @@ std::array<short, 0x2> col_find(
         col_set = set_xor_search(c, j, 'c');
         if (col_set != 0)
         {
-            if ((col_set & (col_set - 1)) == 0)
-            {
-                return {col_set, j};
-            }
-            else
-            {
-                return {get_1st_mapped_short(col_set), j};
-            }
+            return {get_1st_mapped_short(col_set), j};
         }
         col_set = 0x0;
     }
@@ -198,6 +176,7 @@ std::array<unsigned short, konst::bs> try_solo_find(
     {
         short value = equiv(c[index]);
         b[index] = value;
+        std::cout << "sf.i" << b[index] << "@" << algae::to[index] << '\n';
         c = init_can(b);
         index = (value == 0) ? (-1) : find_solo(b, c);
     }
@@ -221,6 +200,7 @@ std::array<unsigned short, konst::bs> try_row_find(
             if ((value[0] & c[grp(value[1], i)]) != 0)
             {
                 b[grp(value[1], i)] = equiv(value[0]);
+                std::cout << "rf.i" << b[grp(value[1], i)] << "@" << algae::to[grp(value[1], i)] << '\n';
             }
         }
         c = init_can(b);
@@ -245,9 +225,10 @@ std::array<unsigned short, konst::bs> try_col_find(
             if ((value[0] & c[i]) != 0)
             {
                 b[i] = equiv(value[0]);
+                std::cout << "cf.i" << b[i] << "@" << algae::to[i] << '\n';
             }
-        }
         c = init_can(b);
+        }
         value = col_find(c);
     }
     return b;
@@ -269,12 +250,25 @@ std::array<unsigned short, konst::bs> try_sqr_find(
             if ((value[0] & c[i]) != 0)
             {
                 b[i] = equiv(value[0]);
+                std::cout << "sqf.i" << b[i] << "@" << algae::to[i] << '\n';
             }
         }
         c = init_can(b);
         value = sqr_find(c);
     }
     return b;
+}
+
+short diff_magn(
+    std::array<unsigned short, konst::bs> b_1,
+    std::array<unsigned short, konst::bs> b_2)
+{
+    short diff_counter{0};
+    for (short i = 0; i < konst::bs; i++)
+    {
+        diff_counter += (b_1[i] == b_2[i]) ? 0 : 1;
+    }
+    return diff_counter;
 }
 
 std::array<unsigned short, konst::bs> solve_board(
@@ -291,47 +285,41 @@ std::array<unsigned short, konst::bs> solve_board(
         temp_b = try_solo_find(b, c);
         if (b != temp_b)
         {
-            counter++;
+            counter += diff_magn(b, temp_b);
             b = temp_b;
             c = init_can(b);
-
         }
-        std::cout << '.';
         blank = blank_check(b);
         temp_b = try_row_find(b, c);
         if (b != temp_b)
         {
-            counter++;
+            counter += diff_magn(b, temp_b);
             b = temp_b;
             c = init_can(b);
         }
-        std::cout << '.';
         blank = blank_check(b);
         temp_b = try_col_find(b, c);
         if (b != temp_b)
         {
-            counter++;
+            counter += diff_magn(b, temp_b);
             b = temp_b;
             c = init_can(b);
         }
-        std::cout << '.';
         blank = blank_check(b);
         temp_b = try_sqr_find(b, c);
         if (b != temp_b)
         {
-            counter++;
+            counter += diff_magn(b, temp_b);
             b = temp_b;
             c = init_can(b);
         }
-        std::cout << '.';
         if (counter == c_i)
         {
             blank = false;
         }
-        std::cout << blank;
     }
     auto end = std::chrono::steady_clock::now();
-    std::cout << "inserted ";
+    std::cout << "inserted " << counter << " values ";
     std::cout << "in " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << " us\n";
     return b;
 }

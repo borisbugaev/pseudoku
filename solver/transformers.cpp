@@ -9,9 +9,11 @@ functions to be used in sudoku evaluation
 TODO: square set eval, set striking
 */
 
-std::array<unsigned short, konst::bs> init_can(
-    std::array<unsigned short, konst::bs> board);
-void draw_board(std::array<unsigned short, konst::bs> b);
+
+    std::array<unsigned short, konst::bs> init_can(
+        std::array<unsigned short, konst::bs> board);
+    void draw_board(std::array<unsigned short, konst::bs> b);
+
 
 /*
 corrects for rows
@@ -104,6 +106,62 @@ bool blank_check(
     return false;
 }
 
+short high_bit_count(
+    unsigned short bit_map)
+{
+    short counter{0x0};
+    for (short i = 0x0; i < 0x10; i++)
+    {
+        counter += 0x1 & (bit_map >> i);
+    }
+    return counter;
+}
+
+short get_1st_mapped_short(
+    unsigned short bit_map)
+{
+    if (bit_map & 0x1)
+    {
+        return 0x1;
+    }
+    else if (bit_map & 0x2)
+    {
+        return 0x2;
+    }
+    else if (bit_map & 0x4)
+    {
+        return 0x4;
+    }
+    else if (bit_map & 0x8)
+    {
+        return 0x8;
+    }
+    else if (bit_map & 0x10)
+    {
+        return 0x10;
+    }
+    else if (bit_map & 0x20)
+    {
+        return 0x20;
+    }
+    else if (bit_map & 0x40)
+    {
+        return 0x40;
+    }
+    else if (bit_map & 0x80)
+    {
+        return 0x80;
+    }
+    else if (bit_map & 0x100)
+    {
+        return 0x100;
+    }
+    else
+    {
+        return 0x0;
+    }
+}
+
 /*
 returns index of first square where there is ==1 candidate
 if none, returns -1
@@ -147,10 +205,18 @@ std::array<short, 0x2> sqr_find(
     for (short i = 0; i < konst::bs; i+=9)
     {
         sqr_set = s_sqr_set(c, i);
-        if ((sqr_set & (sqr_set - 1)) == 0 && sqr_set != 0)
+        if (sqr_set != 0)
         {
-            return {sqr_set, i};
+            if ((sqr_set & (sqr_set - 1)) == 0)
+            {
+                return {sqr_set, i};
+            }
+            else
+            {
+                return {get_1st_mapped_short(sqr_set), i};
+            }
         }
+        sqr_set = 0x0;
     }
     return {0x5, 0x5};
 }
@@ -181,9 +247,16 @@ std::array<short, 0x2> row_find(
     for (short i = 0; i < konst::sb; i+=3)
     {
         row_set = s_row_set(c, i);
-        if ((row_set & (row_set - 1)) == 0 && row_set != 0)
-        {
-            return {row_set, i};
+        if (row_set != 0)
+        {    
+            if ((row_set & (row_set - 1)) == 0)
+            {
+                return {row_set, i};
+            }
+            else
+            {
+                return {get_1st_mapped_short(row_set), i};
+            }
         }
         row_set = 0x0;
     }
@@ -217,9 +290,16 @@ std::array<short, 0x2> col_find(
     {
         j = get_row_pos(0, i);
         col_set = s_col_set(c, j);
-        if ((col_set & (col_set - 1)) == 0 && col_set != 0)
+        if (col_set != 0)
         {
-            return {col_set, j};
+            if ((col_set & (col_set - 1)) == 0)
+            {
+                return {col_set, j};
+            }
+            else
+            {
+                return {get_1st_mapped_short(col_set), j};
+            }
         }
         col_set = 0x0;
     }

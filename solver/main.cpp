@@ -8,19 +8,19 @@ const int EXP_ARGC{2};
 const std::string EXP_ARGSV[EXP_ARGC]{"SELF", "INPUT FILE"};
 const std::string ARG_TYPE{"ENTER NAME OF "};
 
-std::array<unsigned short, konst::bs> kommand(
-    std::string input, 
-    std::array<unsigned short, konst::bs> board,
-    std::array<unsigned short, konst::bs> c_board);
-unsigned short candidates(unsigned char locale, 
-    std::array<unsigned short, konst::bs> board);
-void draw_board(std::array<unsigned short, konst::bs> b);
-void draw_candidates(unsigned short candidat);
-std::array<unsigned short, konst::bs> init_blank();
-std::array<unsigned short, konst::bs> init_from_file(std::string filename);
-std::array<unsigned short, konst::bs> init_can(
-    std::array<unsigned short, konst::bs> board
-);
+
+    std::array<unsigned short, konst::bs> kommand(
+        std::string input, 
+        std::array<unsigned short, konst::bs> board,
+        std::array<unsigned short, konst::bs> c_board);
+    unsigned short candidates(unsigned char locale, 
+        std::array<unsigned short, konst::bs> board);
+    void draw_board(std::array<unsigned short, konst::bs> b);
+    void draw_candidates(unsigned short candidat);
+    std::array<unsigned short, konst::bs> init_blank();
+    std::array<unsigned short, konst::bs> init_from_file(std::string filename);
+    std::array<unsigned short, konst::bs> init_can(
+        std::array<unsigned short, konst::bs> board);
 
 int main(int argc, char** argv)
 {

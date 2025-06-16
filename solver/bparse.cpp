@@ -1,4 +1,3 @@
-#pragma once
 #include "sudokonst.h"
 #include <array>
 
@@ -91,7 +90,7 @@ unsigned short set_parse_row(std::array<unsigned short, konst::bs> board,
         row_start + konst::sb * 2,
         row_start + konst::sb * 2 + 1,
         row_start + konst::sb * 2 + 2};
-    for (unsigned char i = 0; i < konst::sz; i++)
+    for (short i = 0; i < konst::sz; i++)
     {
         set_row = set_row | (1 << (board[row_indices[i]] - 1));
     }
@@ -137,7 +136,7 @@ std::array<unsigned short, konst::bs> all_col_sets(
     std::array<unsigned short, konst::bs> board)
 {
     std::array<unsigned short, konst::bs> cols{};
-    for (unsigned char i = 0; i < konst::sz; i++)
+    for (short i = 0; i < konst::sz; i++)
     {
         cols[i] = set_parse_col(board, i);
     }
@@ -151,7 +150,7 @@ std::array<unsigned short, konst::bs> all_row_sets(
     std::array<unsigned short, konst::bs> board)
 {
     std::array<unsigned short, konst::bs> rows{}; 
-    for (unsigned char i = 0; i < konst::sz; i++)
+    for (short i = 0; i < konst::sz; i++)
     {
         rows[i] = set_parse_row(board, i);
     }
@@ -165,7 +164,7 @@ std::array<unsigned short, konst::bs> all_sqr_sets(
     std::array<unsigned short, konst::bs> board)
 {
     std::array<unsigned short, konst::bs> sqrs{};
-    for (unsigned char i = 0; i < konst::sz; i++)
+    for (short i = 0; i < konst::sz; i++)
     {
         sqrs[i] = set_parse_sqr(board, i);
     }

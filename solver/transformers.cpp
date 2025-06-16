@@ -1,4 +1,3 @@
-#pragma once
 #include "sudokonst.h"
 #include <array>
 #include <iostream>
@@ -18,69 +17,21 @@ TODO: square set eval, set striking
 /*
 corrects for rows
 */
-short get_row_pos(
-    short row_id,
-    short index)
+const short grp(
+    const short row_id,
+    const short index)
 {
-    switch (index)
-    {
-        case 0:
-        {
-            return row_id;
-            break;
-        }
-        case 1:
-        {
-            return row_id + 1;
-            break;
-        }
-        case 2:
-        {
-            return row_id + 2;
-            break;
-        }
-        case 3:
-        {
-            return row_id + konst::sb;
-            break;
-        }
-        case 4:
-        {
-            return row_id + konst::sb + 1;
-            break;
-        }
-        case 5:
-        {
-            return row_id + konst::sb + 2;
-            break;
-        }
-        case 6:
-        {
-            return row_id + konst:: sb * 2;
-            break;
-        }
-        case 7:
-        {
-            return row_id + konst::sb * 2 + 1;
-            break;
-        }
-        case 8:
-        {
-            return row_id + konst::sb * 2 + 2;
-            break;
-        }
-        default:
-        {
-            return row_id;
-            break;
-        }
-    }
+    short id{row_id};
+    id += index % 0x3;
+    id += (index >= 0x3) ? konst::sb : 0;
+    id += (index >= 0x6) ? konst::sb : 0;
+    return id;
 }
 
 /*
 returns actual value represented in candidates when ==1
 */
-short equiv(unsigned short c)
+constexpr short equiv(unsigned short c)
 {
     return ((0x100 & c)/0x100) * 9
     + ((0x80 & c)/0x80) * 8
@@ -120,46 +71,14 @@ short high_bit_count(
 short get_1st_mapped_short(
     unsigned short bit_map)
 {
-    if (bit_map & 0x1)
+    for (short i = 0x1; i < 0x200; i = i << 1)
     {
-        return 0x1;
+        if (bit_map & i)
+        {
+            return i;
+        }
     }
-    else if (bit_map & 0x2)
-    {
-        return 0x2;
-    }
-    else if (bit_map & 0x4)
-    {
-        return 0x4;
-    }
-    else if (bit_map & 0x8)
-    {
-        return 0x8;
-    }
-    else if (bit_map & 0x10)
-    {
-        return 0x10;
-    }
-    else if (bit_map & 0x20)
-    {
-        return 0x20;
-    }
-    else if (bit_map & 0x40)
-    {
-        return 0x40;
-    }
-    else if (bit_map & 0x80)
-    {
-        return 0x80;
-    }
-    else if (bit_map & 0x100)
-    {
-        return 0x100;
-    }
-    else
-    {
-        return 0x0;
-    }
+    return 0x0;
 }
 
 /*
@@ -180,22 +99,24 @@ short find_solo(
     return -1;
 }
 
-unsigned short s_sqr_set(
+unsigned short set_xor_search(
     std::array<unsigned short, konst::bs> c,
-    short sqr_start)
+    short start,
+    char type)
 {
-    short s{0x0};
-    short sqr_set{0x0};
-    for (short i = sqr_start; i < (sqr_start + konst::sz); i++)
+    short add_only_set{0x0}, my_set{0x0};
+    const short i_col{0x3}, i_els{0x1}, f_row{0x0};
+    short by{(type == 'c') ? i_col : i_els}, from{(type == 'r') ? f_row : start};
+    for (short i = from; i < (from + konst::sz); i+=by)
     {
-        if ((sqr_set & c[i]) != 0)
+        const short j{(type == 'r') ? grp(start, i) : i};
+        if ((my_set & c[j]) != 0)
         {
-            s |= (sqr_set & c[i]);
+            add_only_set |= my_set & c[j];
         }
-        sqr_set ^= c[i];
+        my_set ^= c[j];
     }
-    sqr_set &= ~(sqr_set & s);
-    return sqr_set;
+    return my_set & ~(my_set & add_only_set); //n-input 'true' xor
 }
 
 std::array<short, 0x2> sqr_find(
@@ -204,7 +125,7 @@ std::array<short, 0x2> sqr_find(
     short sqr_set{0x0};
     for (short i = 0; i < konst::bs; i+=9)
     {
-        sqr_set = s_sqr_set(c, i);
+        sqr_set = set_xor_search(c, i, 's');
         if (sqr_set != 0)
         {
             if ((sqr_set & (sqr_set - 1)) == 0)
@@ -221,32 +142,13 @@ std::array<short, 0x2> sqr_find(
     return {0x5, 0x5};
 }
 
-unsigned short s_row_set(
-    std::array<unsigned short, konst::bs> c,
-    short row_start)
-{
-    short s{0x0};
-    short row_set{0x0};
-    for (short i = 0; i < konst::sz; i++)
-    {
-        short j = get_row_pos(row_start, i);
-        if ((row_set & c[j]) != 0)
-        {
-            s |= (row_set & c[j]);
-        }
-        row_set ^= c[j];
-    }
-    row_set &= ~(row_set & s);
-    return row_set;
-}
-
 std::array<short, 0x2> row_find(
     std::array<unsigned short, konst::bs> c)
 {
     short row_set{0x0};
     for (short i = 0; i < konst::sb; i+=3)
     {
-        row_set = s_row_set(c, i);
+        row_set = set_xor_search(c, i, 'r');
         if (row_set != 0)
         {    
             if ((row_set & (row_set - 1)) == 0)
@@ -263,33 +165,14 @@ std::array<short, 0x2> row_find(
     return {0x5, 0x5};
 }
 
-unsigned short s_col_set(
-    std::array<unsigned short, konst::bs> c,
-    short col_start)
-{
-    short s{0x0};
-    short col_set{0x0};
-    for (short i = col_start; i < (konst::sb + col_start); i+=3)
-    {
-        if ((col_set & c[i]) != 0)
-        {
-            s |= (col_set & c[i]);
-        }
-        col_set ^= c[i];
-    }
-    col_set &= ~(col_set & s);
-    return col_set;
-}
-
 std::array<short, 0x2> col_find(
     std::array<unsigned short, konst::bs> c)
 {
-    short col_set{0x0};
-    short j{};
+    short col_set{0x0}, j{};
     for (short i = 0; i < konst::sz; i++)
     {
-        j = get_row_pos(0, i);
-        col_set = s_col_set(c, j);
+        j = grp(0, i);
+        col_set = set_xor_search(c, j, 'c');
         if (col_set != 0)
         {
             if ((col_set & (col_set - 1)) == 0)
@@ -311,12 +194,12 @@ std::array<unsigned short, konst::bs> try_solo_find(
     std::array<unsigned short, konst::bs> c)
 {
     short index = find_solo(b, c);
-    while (index != -1)
+    while (index != (-1))
     {
         short value = equiv(c[index]);
         b[index] = value;
         c = init_can(b);
-        index = find_solo(b, c);
+        index = (value == 0) ? (-1) : find_solo(b, c);
     }
 
     return b;
@@ -335,9 +218,9 @@ std::array<unsigned short, konst::bs> try_row_find(
     {
         for (short i = 0; i < konst::sz; i++)
         {
-            if ((value[0] & c[get_row_pos(value[1], i)]) != 0)
+            if ((value[0] & c[grp(value[1], i)]) != 0)
             {
-                b[get_row_pos(value[1], i)] = equiv(value[0]);
+                b[grp(value[1], i)] = equiv(value[0]);
             }
         }
         c = init_can(b);
@@ -399,8 +282,7 @@ std::array<unsigned short, konst::bs> solve_board(
     std::array<unsigned short, konst::bs> c)
 {
     auto start = std::chrono::steady_clock::now();
-    short counter{0};
-    short c_i{0};
+    short counter{0}, c_i{0};
     bool blank{blank_check(b)};
     std::array<unsigned short, konst::bs> temp_b;
     while (blank == true)
@@ -414,6 +296,7 @@ std::array<unsigned short, konst::bs> solve_board(
             c = init_can(b);
 
         }
+        std::cout << '.';
         blank = blank_check(b);
         temp_b = try_row_find(b, c);
         if (b != temp_b)
@@ -422,6 +305,7 @@ std::array<unsigned short, konst::bs> solve_board(
             b = temp_b;
             c = init_can(b);
         }
+        std::cout << '.';
         blank = blank_check(b);
         temp_b = try_col_find(b, c);
         if (b != temp_b)
@@ -430,6 +314,7 @@ std::array<unsigned short, konst::bs> solve_board(
             b = temp_b;
             c = init_can(b);
         }
+        std::cout << '.';
         blank = blank_check(b);
         temp_b = try_sqr_find(b, c);
         if (b != temp_b)
@@ -438,10 +323,12 @@ std::array<unsigned short, konst::bs> solve_board(
             b = temp_b;
             c = init_can(b);
         }
+        std::cout << '.';
         if (counter == c_i)
         {
             blank = false;
         }
+        std::cout << blank;
     }
     auto end = std::chrono::steady_clock::now();
     std::cout << "inserted ";

@@ -1,4 +1,3 @@
-#pragma once
 #include "sudokonst.h"
 #include <string>
 #include <array>

@@ -4,7 +4,6 @@ sudoku constants in a shared header
 */
 #pragma once
 #include <string>
-#include <vector>
 #include <array>
 #include <unordered_map>
 
@@ -27,6 +26,7 @@ namespace pseud
 
 namespace komm
 {
+    const std::string usr_open{"open"};
     const std::string usr_exit{"exit"};
     const std::string usr_help{"?"};
     const std::string usr_ref{"reference"};

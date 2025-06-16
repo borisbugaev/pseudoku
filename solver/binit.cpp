@@ -1,4 +1,3 @@
-#pragma once
 #include "sudokonst.h"
 #include <fstream>
 #include <array>
@@ -20,7 +19,7 @@ std::array<unsigned short, konst::bs> init_from_file(std::string filename)
     std::ifstream file{filename};
     std::array<unsigned short, konst::bs> board{};
     char l{};
-    unsigned char iterator{0};
+    short iterator{0};
     while (file.get(l) && iterator < konst::bs)
     {
         if ('0' <= l && l <= '9')
@@ -39,7 +38,7 @@ init blank board;
 std::array<unsigned short, konst::bs> init_blank()
 {
     std::array<unsigned short, konst::bs> board{};
-    for (unsigned char i = 0; i < konst::bs; i++)
+    for (short i = 0; i < konst::bs; i++)
     {
         board[i] = 0;
     }
@@ -54,7 +53,7 @@ std::array<unsigned short, konst::bs> init_can(
 )
 {
     std::array<unsigned short, konst::bs> c_board{};
-    for (unsigned char i = 0; i < konst::bs; i++)
+    for (short i = 0; i < konst::bs; i++)
     {
         c_board[i] = candidates(i, board);
         if (board[i] != 0)

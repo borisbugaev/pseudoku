@@ -1,4 +1,3 @@
-#pragma once
 #include "sudokonst.h"
 #include <array>
 #include <string>
@@ -6,36 +5,32 @@
 #include <unordered_map>
 
 
-    unsigned short candidates(unsigned char locale, 
+std::array<unsigned short, konst::bs> init_from_file(std::string filename);
+unsigned short candidates(unsigned char locale, 
         std::array<unsigned short, konst::bs> board);
-    void draw_board(std::array<unsigned short, konst::bs> b);
-    void draw_candidates(unsigned short candidat);
-    void draw_boardref(std::array<unsigned short, konst::bs> b);
-    short equiv(unsigned short c);
-    short find_solo(
+void draw_board(std::array<unsigned short, konst::bs> b);
+void draw_candidates(unsigned short candidat);
+void draw_boardref(std::array<unsigned short, konst::bs> b);
+short equiv(unsigned short c);
+short find_solo(
         std::array<unsigned short, konst::bs> b,
         std::array<unsigned short, konst::bs> c);
-    std::array<unsigned short, konst::bs> try_solo_find(
+std::array<unsigned short, konst::bs> try_solo_find(
         std::array<unsigned short, konst::bs> b,
         std::array<unsigned short, konst::bs> c);
-    std::array<unsigned short, konst::bs> try_sqr_find(
+std::array<unsigned short, konst::bs> try_sqr_find(
         std::array<unsigned short, konst::bs> b,
         std::array<unsigned short, konst::bs> c);
-    std::array<unsigned short, konst::bs> try_row_find(
+std::array<unsigned short, konst::bs> try_row_find(
         std::array<unsigned short, konst::bs> b,
         std::array<unsigned short, konst::bs> c);
-    std::array<unsigned short, konst::bs> solve_board(
+std::array<unsigned short, konst::bs> solve_board(
         std::array<unsigned short, konst::bs> b,
         std::array<unsigned short, konst::bs> c);
-    unsigned short s_col_set(
+unsigned short set_xor_search(
         std::array<unsigned short, konst::bs> c,
-        short col_start);
-    unsigned short s_sqr_set(
-        std::array<unsigned short, konst::bs> c,
-        short sqr_start);
-    unsigned short s_row_set(
-        std::array<unsigned short, konst::bs> c,
-        short row_start);
+        short start,
+        char type);
 
 
 std::array<unsigned short, konst::bs> kommand(
@@ -138,7 +133,7 @@ std::array<unsigned short, konst::bs> kommand(
         std::cout << "Search Column...";
         std::cin >> inputstr;
         short searchfor = std::stoi(inputstr);
-        draw_candidates(s_col_set(c_board, searchfor));
+        draw_candidates(set_xor_search(c_board, searchfor, 'c'));
     }
     else if (input.compare(komm::usr_row) == 0)
     {
@@ -152,7 +147,7 @@ std::array<unsigned short, konst::bs> kommand(
         else
         {
             short searchfor = std::stoi(inputstr);
-            draw_candidates(s_row_set(c_board, searchfor));
+            draw_candidates(set_xor_search(c_board, searchfor, 'r'));
         }
     }
     else if (input.compare(komm::usr_sqr) == 0)
@@ -167,8 +162,16 @@ std::array<unsigned short, konst::bs> kommand(
         else
         {
             short searchfor = std::stoi(inputstr);
-            draw_candidates(s_sqr_set(c_board, searchfor));
+            draw_candidates(set_xor_search(c_board, searchfor, 's'));
         }
+    }
+    else if (input.compare(komm::usr_open) == 0)
+    {
+        std::string inputstr{};
+        std::cout << "Filename...";
+        std::cin >> inputstr;
+        board = init_from_file(inputstr);
+        return board;
     }
     else
     {

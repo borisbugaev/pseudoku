@@ -31,8 +31,14 @@
 },
 {
   "directory": "C:/Users/wrlar/Documents/g/pseudoku/solver/build",
-  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe   -g -o CMakeFiles\\pdk.dir\\transformers.cpp.obj -c C:\\Users\\wrlar\\Documents\\g\\pseudoku\\solver\\transformers.cpp",
-  "file": "C:/Users/wrlar/Documents/g/pseudoku/solver/transformers.cpp",
-  "output": "CMakeFiles/pdk.dir/transformers.cpp.obj"
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe   -g -o CMakeFiles\\pdk.dir\\eval_utils.cpp.obj -c C:\\Users\\wrlar\\Documents\\g\\pseudoku\\solver\\eval_utils.cpp",
+  "file": "C:/Users/wrlar/Documents/g/pseudoku/solver/eval_utils.cpp",
+  "output": "CMakeFiles/pdk.dir/eval_utils.cpp.obj"
+},
+{
+  "directory": "C:/Users/wrlar/Documents/g/pseudoku/solver/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe   -g -o CMakeFiles\\pdk.dir\\solver_caller.cpp.obj -c C:\\Users\\wrlar\\Documents\\g\\pseudoku\\solver\\solver_caller.cpp",
+  "file": "C:/Users/wrlar/Documents/g/pseudoku/solver/solver_caller.cpp",
+  "output": "CMakeFiles/pdk.dir/solver_caller.cpp.obj"
 }
 ]

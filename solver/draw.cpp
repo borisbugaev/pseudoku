@@ -1,4 +1,5 @@
 #include "sudokonst.h"
+#include <ios>
 #include <string>
 #include <array>
 #include <iostream>
@@ -122,9 +123,21 @@ void draw_board(std::array<unsigned short, konst::bs> b)
     {
         if (f/konst::sz != 0 && f%konst::sz == 0)
         {
-            std::cout << pseud::sqr_x_brdr << '\n';
+            std::cout << std::dec << pseud::sqr_x_brdr << '\n';
         }
         std::cout << board_line(b, f, 'n');
+    }
+}
+
+void draw_cboard(std::array<unsigned short, konst::bs> c)
+{
+    for (unsigned short f = 0; f < konst::sb; f+=3)
+    {
+        if (f/konst::sz != 0 && f%konst::sz == 0)
+        {
+            std::cout << pseud::sqr_x_brdr << '\n';
+        }
+        std::cout << board_line(c, f, 'n');
     }
 }
 

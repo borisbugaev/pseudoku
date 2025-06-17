@@ -49,6 +49,7 @@
 				2,
 				3,
 				4,
+				5,
 				6
 			]
 		}
@@ -87,6 +88,7 @@
 				2,
 				3,
 				4,
+				5,
 				6
 			]
 		},
@@ -94,7 +96,7 @@
 			"name" : "Header Files",
 			"sourceIndexes" : 
 			[
-				5
+				7
 			]
 		}
 	],
@@ -132,14 +134,20 @@
 		},
 		{
 			"backtrace" : 1,
-			"path" : "sudokonst.h",
-			"sourceGroupIndex" : 1
+			"compileGroupIndex" : 0,
+			"path" : "eval_utils.cpp",
+			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "transformers.cpp",
+			"path" : "solver_caller.cpp",
 			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "sudokonst.h",
+			"sourceGroupIndex" : 1
 		}
 	],
 	"type" : "EXECUTABLE"

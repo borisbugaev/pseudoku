@@ -44,6 +44,7 @@ namespace komm
     const std::string usr_col{"column"};
     const std::string usr_row{"row"};
     const std::string usr_sqr{"square"};
+    const std::string usr_cdrw{"cdraw"};
 }
 
 namespace algae

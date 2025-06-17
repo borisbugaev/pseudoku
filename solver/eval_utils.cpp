@@ -1,7 +1,5 @@
 #include "sudokonst.h"
 #include <array>
-#include <iostream>
-#include <chrono>
 
 /*
 functions to be used in sudoku evaluation
@@ -9,9 +7,9 @@ TODO: square set eval, set striking
 */
 
 
-    std::array<unsigned short, konst::bs> init_can(
-        std::array<unsigned short, konst::bs> board);
-    void draw_board(std::array<unsigned short, konst::bs> b);
+std::array<unsigned short, konst::bs> init_can(
+    std::array<unsigned short, konst::bs> board);
+void draw_board(std::array<unsigned short, konst::bs> b);
 
 
 /*
@@ -176,7 +174,6 @@ std::array<unsigned short, konst::bs> try_solo_find(
     {
         short value = equiv(c[index]);
         b[index] = value;
-        std::cout << "sf.i" << b[index] << "@" << algae::to[index] << '\n';
         c = init_can(b);
         index = (value == 0) ? (-1) : find_solo(b, c);
     }
@@ -200,7 +197,6 @@ std::array<unsigned short, konst::bs> try_row_find(
             if ((value[0] & c[grp(value[1], i)]) != 0)
             {
                 b[grp(value[1], i)] = equiv(value[0]);
-                std::cout << "rf.i" << b[grp(value[1], i)] << "@" << algae::to[grp(value[1], i)] << '\n';
             }
         }
         c = init_can(b);
@@ -225,7 +221,6 @@ std::array<unsigned short, konst::bs> try_col_find(
             if ((value[0] & c[i]) != 0)
             {
                 b[i] = equiv(value[0]);
-                std::cout << "cf.i" << b[i] << "@" << algae::to[i] << '\n';
             }
         c = init_can(b);
         }
@@ -250,7 +245,6 @@ std::array<unsigned short, konst::bs> try_sqr_find(
             if ((value[0] & c[i]) != 0)
             {
                 b[i] = equiv(value[0]);
-                std::cout << "sqf.i" << b[i] << "@" << algae::to[i] << '\n';
             }
         }
         c = init_can(b);
@@ -269,57 +263,4 @@ short diff_magn(
         diff_counter += (b_1[i] == b_2[i]) ? 0 : 1;
     }
     return diff_counter;
-}
-
-std::array<unsigned short, konst::bs> solve_board(
-    std::array<unsigned short, konst::bs> b,
-    std::array<unsigned short, konst::bs> c)
-{
-    auto start = std::chrono::steady_clock::now();
-    short counter{0}, c_i{0};
-    bool blank{blank_check(b)};
-    std::array<unsigned short, konst::bs> temp_b;
-    while (blank == true)
-    {
-        c_i = counter;
-        temp_b = try_solo_find(b, c);
-        if (b != temp_b)
-        {
-            counter += diff_magn(b, temp_b);
-            b = temp_b;
-            c = init_can(b);
-        }
-        blank = blank_check(b);
-        temp_b = try_row_find(b, c);
-        if (b != temp_b)
-        {
-            counter += diff_magn(b, temp_b);
-            b = temp_b;
-            c = init_can(b);
-        }
-        blank = blank_check(b);
-        temp_b = try_col_find(b, c);
-        if (b != temp_b)
-        {
-            counter += diff_magn(b, temp_b);
-            b = temp_b;
-            c = init_can(b);
-        }
-        blank = blank_check(b);
-        temp_b = try_sqr_find(b, c);
-        if (b != temp_b)
-        {
-            counter += diff_magn(b, temp_b);
-            b = temp_b;
-            c = init_can(b);
-        }
-        if (counter == c_i)
-        {
-            blank = false;
-        }
-    }
-    auto end = std::chrono::steady_clock::now();
-    std::cout << "inserted " << counter << " values ";
-    std::cout << "in " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << " us\n";
-    return b;
 }

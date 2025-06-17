@@ -9,6 +9,7 @@ std::array<unsigned short, konst::bs> init_from_file(std::string filename);
 unsigned short candidates(unsigned char locale, 
         std::array<unsigned short, konst::bs> board);
 void draw_board(std::array<unsigned short, konst::bs> b);
+void draw_cboard(std::array<unsigned short, konst::bs> c);
 void draw_candidates(unsigned short candidat);
 void draw_boardref(std::array<unsigned short, konst::bs> b);
 short equiv(unsigned short c);
@@ -172,6 +173,10 @@ std::array<unsigned short, konst::bs> kommand(
         std::cin >> inputstr;
         board = init_from_file(inputstr);
         return board;
+    }
+    else if (input.compare(komm::usr_cdrw) == 0)
+    {
+        draw_cboard(c_board);
     }
     else
     {

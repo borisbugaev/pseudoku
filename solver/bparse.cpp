@@ -130,48 +130,6 @@ unsigned short set_parse_sqr(std::array<unsigned short, konst::bs> board,
 }
 
 /*
-calc set of int for all columns
-*/
-std::array<unsigned short, konst::bs> all_col_sets(
-    std::array<unsigned short, konst::bs> board)
-{
-    std::array<unsigned short, konst::bs> cols{};
-    for (short i = 0; i < konst::sz; i++)
-    {
-        cols[i] = set_parse_col(board, i);
-    }
-    return cols;
-}
-
-/*
-calc set of int for all rows
-*/
-std::array<unsigned short, konst::bs> all_row_sets(
-    std::array<unsigned short, konst::bs> board)
-{
-    std::array<unsigned short, konst::bs> rows{}; 
-    for (short i = 0; i < konst::sz; i++)
-    {
-        rows[i] = set_parse_row(board, i);
-    }
-    return rows;
-}
-
-/*
-calc set of int for all squares
-*/
-std::array<unsigned short, konst::bs> all_sqr_sets(
-    std::array<unsigned short, konst::bs> board)
-{
-    std::array<unsigned short, konst::bs> sqrs{};
-    for (short i = 0; i < konst::sz; i++)
-    {
-        sqrs[i] = set_parse_sqr(board, i);
-    }
-    return sqrs;
-}
-
-/*
 calc valid values at given index
 */
 unsigned short candidates(unsigned char locale, 

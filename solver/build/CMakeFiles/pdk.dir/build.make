@@ -141,19 +141,33 @@ CMakeFiles/pdk.dir/draw.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/pdk.dir/draw.cpp.s"
 	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\wrlar\Documents\g\pseudoku\solver\draw.cpp -o CMakeFiles\pdk.dir\draw.cpp.s
 
-CMakeFiles/pdk.dir/transformers.cpp.obj: CMakeFiles/pdk.dir/flags.make
-CMakeFiles/pdk.dir/transformers.cpp.obj: C:/Users/wrlar/Documents/g/pseudoku/solver/transformers.cpp
-CMakeFiles/pdk.dir/transformers.cpp.obj: CMakeFiles/pdk.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\wrlar\Documents\g\pseudoku\solver\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/pdk.dir/transformers.cpp.obj"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pdk.dir/transformers.cpp.obj -MF CMakeFiles\pdk.dir\transformers.cpp.obj.d -o CMakeFiles\pdk.dir\transformers.cpp.obj -c C:\Users\wrlar\Documents\g\pseudoku\solver\transformers.cpp
+CMakeFiles/pdk.dir/eval_utils.cpp.obj: CMakeFiles/pdk.dir/flags.make
+CMakeFiles/pdk.dir/eval_utils.cpp.obj: C:/Users/wrlar/Documents/g/pseudoku/solver/eval_utils.cpp
+CMakeFiles/pdk.dir/eval_utils.cpp.obj: CMakeFiles/pdk.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\wrlar\Documents\g\pseudoku\solver\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/pdk.dir/eval_utils.cpp.obj"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pdk.dir/eval_utils.cpp.obj -MF CMakeFiles\pdk.dir\eval_utils.cpp.obj.d -o CMakeFiles\pdk.dir\eval_utils.cpp.obj -c C:\Users\wrlar\Documents\g\pseudoku\solver\eval_utils.cpp
 
-CMakeFiles/pdk.dir/transformers.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/pdk.dir/transformers.cpp.i"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\wrlar\Documents\g\pseudoku\solver\transformers.cpp > CMakeFiles\pdk.dir\transformers.cpp.i
+CMakeFiles/pdk.dir/eval_utils.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/pdk.dir/eval_utils.cpp.i"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\wrlar\Documents\g\pseudoku\solver\eval_utils.cpp > CMakeFiles\pdk.dir\eval_utils.cpp.i
 
-CMakeFiles/pdk.dir/transformers.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/pdk.dir/transformers.cpp.s"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\wrlar\Documents\g\pseudoku\solver\transformers.cpp -o CMakeFiles\pdk.dir\transformers.cpp.s
+CMakeFiles/pdk.dir/eval_utils.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/pdk.dir/eval_utils.cpp.s"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\wrlar\Documents\g\pseudoku\solver\eval_utils.cpp -o CMakeFiles\pdk.dir\eval_utils.cpp.s
+
+CMakeFiles/pdk.dir/solver_caller.cpp.obj: CMakeFiles/pdk.dir/flags.make
+CMakeFiles/pdk.dir/solver_caller.cpp.obj: C:/Users/wrlar/Documents/g/pseudoku/solver/solver_caller.cpp
+CMakeFiles/pdk.dir/solver_caller.cpp.obj: CMakeFiles/pdk.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\wrlar\Documents\g\pseudoku\solver\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/pdk.dir/solver_caller.cpp.obj"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pdk.dir/solver_caller.cpp.obj -MF CMakeFiles\pdk.dir\solver_caller.cpp.obj.d -o CMakeFiles\pdk.dir\solver_caller.cpp.obj -c C:\Users\wrlar\Documents\g\pseudoku\solver\solver_caller.cpp
+
+CMakeFiles/pdk.dir/solver_caller.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/pdk.dir/solver_caller.cpp.i"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\wrlar\Documents\g\pseudoku\solver\solver_caller.cpp > CMakeFiles\pdk.dir\solver_caller.cpp.i
+
+CMakeFiles/pdk.dir/solver_caller.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/pdk.dir/solver_caller.cpp.s"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\wrlar\Documents\g\pseudoku\solver\solver_caller.cpp -o CMakeFiles\pdk.dir\solver_caller.cpp.s
 
 # Object files for target pdk
 pdk_OBJECTS = \
@@ -162,7 +176,8 @@ pdk_OBJECTS = \
 "CMakeFiles/pdk.dir/binit.cpp.obj" \
 "CMakeFiles/pdk.dir/bparse.cpp.obj" \
 "CMakeFiles/pdk.dir/draw.cpp.obj" \
-"CMakeFiles/pdk.dir/transformers.cpp.obj"
+"CMakeFiles/pdk.dir/eval_utils.cpp.obj" \
+"CMakeFiles/pdk.dir/solver_caller.cpp.obj"
 
 # External object files for target pdk
 pdk_EXTERNAL_OBJECTS =
@@ -172,12 +187,13 @@ pdk.exe: CMakeFiles/pdk.dir/kmd.cpp.obj
 pdk.exe: CMakeFiles/pdk.dir/binit.cpp.obj
 pdk.exe: CMakeFiles/pdk.dir/bparse.cpp.obj
 pdk.exe: CMakeFiles/pdk.dir/draw.cpp.obj
-pdk.exe: CMakeFiles/pdk.dir/transformers.cpp.obj
+pdk.exe: CMakeFiles/pdk.dir/eval_utils.cpp.obj
+pdk.exe: CMakeFiles/pdk.dir/solver_caller.cpp.obj
 pdk.exe: CMakeFiles/pdk.dir/build.make
 pdk.exe: CMakeFiles/pdk.dir/linkLibs.rsp
 pdk.exe: CMakeFiles/pdk.dir/objects1.rsp
 pdk.exe: CMakeFiles/pdk.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\wrlar\Documents\g\pseudoku\solver\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable pdk.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\wrlar\Documents\g\pseudoku\solver\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable pdk.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\pdk.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

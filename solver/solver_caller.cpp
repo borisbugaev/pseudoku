@@ -2,6 +2,9 @@
 #include <iostream>
 #include <chrono>
 
+
+std::array<unsigned short, konst::bs> prune(
+    std::array<unsigned short, konst::bs> c);
 std::array<unsigned short, konst::bs> try_sqr_find(
     std::array<unsigned short, konst::bs> b,
     std::array<unsigned short, konst::bs> c);
@@ -40,6 +43,7 @@ std::array<unsigned short, konst::bs> solve_board(
             counter += diff_magn(b, temp_b);
             b = temp_b;
             c = init_can(b);
+            //draw_board(b);
         }
         blank = blank_check(b);
         temp_b = try_row_find(b, c);
@@ -48,6 +52,7 @@ std::array<unsigned short, konst::bs> solve_board(
             counter += diff_magn(b, temp_b);
             b = temp_b;
             c = init_can(b);
+            //draw_board(b);
         }
         blank = blank_check(b);
         temp_b = try_col_find(b, c);
@@ -56,6 +61,7 @@ std::array<unsigned short, konst::bs> solve_board(
             counter += diff_magn(b, temp_b);
             b = temp_b;
             c = init_can(b);
+            //draw_board(b);
         }
         blank = blank_check(b);
         temp_b = try_sqr_find(b, c);
@@ -64,6 +70,7 @@ std::array<unsigned short, konst::bs> solve_board(
             counter += diff_magn(b, temp_b);
             b = temp_b;
             c = init_can(b);
+            //draw_board(b);
         }
         if (counter == c_i)
         {

@@ -35,6 +35,7 @@ namespace komm
     const std::string usr_insr{"insert"};
     const std::string usr_fin{"solve"};
     const std::string usr_srch{"search"};
+    const std::string usr_bexp{"export"};
 
     /*
     commands primarily used for debugging, etc

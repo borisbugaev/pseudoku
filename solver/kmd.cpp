@@ -6,6 +6,9 @@
 
 
 std::array<unsigned short, konst::bs> init_from_file(std::string filename);
+short board_export(
+    std::array<unsigned short, konst::bs> board,
+    std::string filename);
 unsigned short candidates(unsigned char locale, 
         std::array<unsigned short, konst::bs> board);
 void draw_board(std::array<unsigned short, konst::bs> b);
@@ -177,6 +180,13 @@ std::array<unsigned short, konst::bs> kommand(
     else if (input.compare(komm::usr_cdrw) == 0)
     {
         draw_cboard(c_board);
+    }
+    else if (input.compare(komm::usr_bexp) == 0)
+    {
+        std::string inputstr{};
+        std::cout << "Output Filename...";
+        std::cin >> inputstr;
+        short out_file{board_export(board, inputstr)};
     }
     else
     {

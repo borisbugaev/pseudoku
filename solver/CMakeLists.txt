@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.31...4.0)
 project(
     Pseudoku
-    VERSION 0.126
+    VERSION 0.127
     LANGUAGES CXX)
 add_executable(
     pdk 

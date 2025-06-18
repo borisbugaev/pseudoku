@@ -10,7 +10,12 @@ TODO:
 
 unsigned short candidates(unsigned char locale, 
     std::array<unsigned short, konst::bs> board);
-
+std::string board_line(
+    std::array<unsigned short, konst::bs> b,
+    unsigned short f, 
+    char flag);
+std::array<unsigned short, konst::bs> prune(
+    std::array<unsigned short, konst::bs> c);
 /*
 init board from file
 */
@@ -61,5 +66,22 @@ std::array<unsigned short, konst::bs> init_can(
             c_board[i] = 0;
         }
     }
+    c_board = prune(c_board);
     return c_board;
+}
+
+short board_export(
+    std::array<unsigned short, konst::bs> board,
+    std::string filename)
+{
+    std::ofstream file{filename};
+    for (unsigned short f = 0; f < konst::sb; f+=3)
+    {
+        if (f/konst::sz != 0 && f%konst::sz == 0)
+        {
+            file << pseud::sqr_x_brdr << '\n';
+        }
+        file << board_line(board, f, 'n');
+    }
+    return 0;
 }

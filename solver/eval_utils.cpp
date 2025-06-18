@@ -1,5 +1,9 @@
 #include "sudokonst.h"
 #include <array>
+//#define DEBUG
+#ifdef DEBUG
+#include <iostream>
+#endif
 
 /*
 functions to be used in sudoku evaluation
@@ -7,6 +11,19 @@ TODO: square set eval, set striking
 */
 
 
+constexpr std::array<unsigned short, konst::bs> sref{
+    4, 3, 1, 9, 6, 2, 8, 7, 5, 
+    6, 2, 7, 5, 4, 9, 1, 8, 3, 
+    2, 1, 6, 3, 9, 8, 7, 5, 4, 
+    2, 5, 9, 3, 8, 7, 1, 4, 6, 
+    4, 9, 3, 8, 2, 1, 6, 7, 5, 
+    7, 3, 8, 5, 1, 4, 9, 6, 2, 
+    7, 8, 6, 4, 5, 1, 3, 2, 9, 
+    8, 1, 5, 6, 7, 3, 9, 4, 2, 
+    5, 9, 4, 2, 6, 7, 1, 3, 8
+};
+
+void draw_candidates(unsigned short candidat);
 std::array<unsigned short, konst::bs> init_can(
     std::array<unsigned short, konst::bs> board);
 void draw_board(std::array<unsigned short, konst::bs> b);
@@ -165,6 +182,181 @@ std::array<short, 0x2> col_find(
     return {0x5, 0x5};
 }
 
+std::array<unsigned short, konst::bs> sqr_prune(
+    std::array<unsigned short, konst::bs> c)
+{
+    short candidate_pair{0x0};
+    for (short i = 0; i < konst::bs; i += konst::sz)
+    {
+        for (short j = 0; j < konst::sz; j++)
+        {
+            if (c[i+j] == 0)
+            {
+                continue;
+            }
+            else if (high_bit_count(c[i+j]) == 2)
+            {
+                for (short k = j + 1; k < konst::sz - j; k++)
+                {
+                    candidate_pair = c[i+j] == c[i+k] ? c[i+j] : candidate_pair;
+                }
+            }
+        }
+        for (short j = 0; j < konst::sz; j++)
+        {
+            if (j == 0 && high_bit_count(candidate_pair) != 2)
+            {
+                break;
+            }
+            if (c[i+j] != candidate_pair && high_bit_count(c[i+j]) > 1)
+            {
+                #ifdef DEBUG
+                std::cout << "sqr_set " << algae::to[i+j] << " from ";
+                draw_candidates(c[i+j]);
+                #endif
+                c[i+j] &= ~candidate_pair;
+                #ifdef DEBUG
+                std::cout << "\t   to   ";
+                draw_candidates(c[i+j]);
+                #endif
+            }
+            #ifdef DEBUG_is
+            else{
+            std::cout << "sqr_____" << algae::to[i+j] << "_is ";
+            draw_candidates(c[i+j]);
+            }
+            #endif
+        }
+        candidate_pair = 0x0;
+        // if 2 squares each have 2 candidates
+        // and those 2 candidates are the same
+        // then remove those candidates from all other candidate sets
+    }
+    return c;
+}
+
+std::array<unsigned short, konst::bs> row_prune(
+    std::array<unsigned short, konst::bs> c)
+{
+    short candidate_pair{0x0};
+    for (short i = 0; i < konst::sb; i+=3)
+    {
+       for (short j = 0; j < konst::sz; j++)
+       {
+            //i = (i<0) ? 0 : i;
+            const short r_1{grp(i, j)};
+            if (c[r_1] == 0)
+            {
+                continue;
+            }
+            else if (high_bit_count(c[r_1]) == 2)
+            {
+                for (short k = j + 1; k < konst::sz - j; k++)
+                {
+                    const short r_2{grp(i, k)};
+                    candidate_pair = c[r_1] == c[r_2] ? c[r_1] : candidate_pair;
+                }
+            }
+            #ifdef DEBUG_REV
+            std::cout << "at " << algae::to[r_1] << ' ';
+            draw_candidates(c[r_1]);
+            #endif
+       }
+       for (short j = 0; j < konst::sz; j++)
+       {
+            if (j == 0 && high_bit_count(candidate_pair) != 2)
+            {
+                break;
+            }
+            const short r{grp(i, j)};
+            if (c[r] != candidate_pair && high_bit_count(c[r]) > 1)
+            {
+                #ifdef DEBUG
+                std::cout << "row_set " << algae::to[r] << " from ";
+                draw_candidates(c[r]);
+                #endif
+                c[r] &= ~candidate_pair;
+                #ifdef DEBUG_REV
+                std::cout << "pair__is ";
+                draw_candidates(candidate_pair);
+                #endif
+                #ifdef DEBUG
+                std::cout << "\t   to   ";
+                draw_candidates(c[r]);
+                #endif
+            }
+            #ifdef DEBUG_is
+            else{
+            std::cout << "row_____" << algae::to[r] << "_is ";
+            draw_candidates(c[r]);
+            }
+            #endif
+       }
+       candidate_pair = 0x0;
+    }
+    return c;
+}
+
+std::array<unsigned short, konst::bs> col_prune(
+    std::array<unsigned short, konst::bs> c)
+{
+    short candidate_pair{0x0};
+    for (short i = 0; i < konst::sz; i++)
+    {
+        const short r{grp(0, i)};
+        for (short j = r; j < r + konst::sb; j+=3)
+        {
+            if (c[j] == 0x0)
+            {
+                continue;
+            }
+            else if (high_bit_count(c[j]) == 2)
+            {
+                for (short k = (j + 3); k < r + konst::sb; k+=3)
+                {
+                    candidate_pair = c[j] == c[k] ? c[j] : candidate_pair;
+                }
+            }
+        }
+        for (short j = r; j < r + konst::sb; j+=3)
+        {
+            if (j == r && high_bit_count(candidate_pair) != 2)
+            {
+                break;
+            }
+            else if (c[j] != candidate_pair && high_bit_count(c[j]) > 1)
+            {
+                #ifdef DEBUG
+                std::cout << "col_set " << algae::to[j] << " from ";
+                draw_candidates(c[j]);
+                #endif
+                c[j] &= ~candidate_pair;
+                #ifdef DEBUG
+                std::cout <<"\t   to   ";
+                draw_candidates(c[j]);
+                #endif
+            }
+            #ifdef DEBUG_is
+            else{
+            std::cout << "col_____" << algae::to[j] << "_is ";
+            draw_candidates(c[j]);
+            }
+            #endif
+        }
+        candidate_pair = 0x0;
+    }
+    return c;
+}
+
+std::array<unsigned short, konst::bs> prune(
+    std::array<unsigned short, konst::bs> c)
+{
+    c = sqr_prune(c);
+    c = row_prune(c);
+    c = col_prune(c);
+    return c;
+}
+
 std::array<unsigned short, konst::bs> try_solo_find(
     std::array<unsigned short, konst::bs> b,
     std::array<unsigned short, konst::bs> c)
@@ -174,6 +366,14 @@ std::array<unsigned short, konst::bs> try_solo_find(
     {
         short value = equiv(c[index]);
         b[index] = value;
+        #ifdef DEBUG
+        bool FAILURE{(b[index] == sref[index]) ? false : true};
+        if (FAILURE)
+        {
+            std::cout << "ERR\n";
+        }
+        std::cout << "sol_i_" << b[index] << "_at_" << algae::to[index] << '\n';
+        #endif
         c = init_can(b);
         index = (value == 0) ? (-1) : find_solo(b, c);
     }
@@ -197,6 +397,15 @@ std::array<unsigned short, konst::bs> try_row_find(
             if ((value[0] & c[grp(value[1], i)]) != 0)
             {
                 b[grp(value[1], i)] = equiv(value[0]);
+                #ifdef DEBUG
+                bool FAILURE{(b[grp(value[1], i)] == sref[grp(value[1], i)]) ? false : true};
+                if (FAILURE)
+                {
+                    std::cout << "ERR\n";
+                }
+                short grep{grp(value[1], i)};
+                std::cout << "row_i_" << b[grep] << "_at_" << algae::to[grep] << '\n';
+                #endif
             }
         }
         c = init_can(b);
@@ -221,6 +430,14 @@ std::array<unsigned short, konst::bs> try_col_find(
             if ((value[0] & c[i]) != 0)
             {
                 b[i] = equiv(value[0]);
+                #ifdef DEBUG
+                bool FAILURE{(b[i] == sref[i]) ? false : true};
+                if (FAILURE)
+                {
+                    std::cout << "ERR\n";
+                }
+                std::cout << "col_i_" << b[i] << "_at_" << algae::to[i] << '\n';
+                #endif
             }
         c = init_can(b);
         }
@@ -245,6 +462,14 @@ std::array<unsigned short, konst::bs> try_sqr_find(
             if ((value[0] & c[i]) != 0)
             {
                 b[i] = equiv(value[0]);
+                #ifdef DEBUG
+                bool FAILURE{(b[i] == sref[i]) ? false : true};
+                if (FAILURE)
+                {
+                    std::cout << "ERR\n";
+                }
+                std::cout << "sqr_i_" << b[i] << "_at_" << algae::to[i] << '\n';
+                #endif
             }
         }
         c = init_can(b);

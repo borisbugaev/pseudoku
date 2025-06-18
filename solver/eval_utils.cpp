@@ -10,19 +10,6 @@ functions to be used in sudoku evaluation
 TODO: square set eval, set striking
 */
 
-
-constexpr std::array<unsigned short, konst::bs> sref{
-    4, 3, 1, 9, 6, 2, 8, 7, 5, 
-    6, 2, 7, 5, 4, 9, 1, 8, 3, 
-    2, 1, 6, 3, 9, 8, 7, 5, 4, 
-    2, 5, 9, 3, 8, 7, 1, 4, 6, 
-    4, 9, 3, 8, 2, 1, 6, 7, 5, 
-    7, 3, 8, 5, 1, 4, 9, 6, 2, 
-    7, 8, 6, 4, 5, 1, 3, 2, 9, 
-    8, 1, 5, 6, 7, 3, 9, 4, 2, 
-    5, 9, 4, 2, 6, 7, 1, 3, 8
-};
-
 void draw_candidates(unsigned short candidat);
 std::array<unsigned short, konst::bs> init_can(
     std::array<unsigned short, konst::bs> board);

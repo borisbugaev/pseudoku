@@ -18,24 +18,24 @@ void draw_candidates(unsigned short candidat);
 void draw_boardref(std::array<unsigned short, konst::bs> b);
 short equiv(unsigned short c);
 short find_solo(
-        std::array<unsigned short, konst::bs> b,
-        std::array<unsigned short, konst::bs> c);
+    std::array<unsigned short, konst::bs> b,
+    std::array<unsigned short, konst::bs> c);
 std::array<unsigned short, konst::bs> try_solo_find(
-        std::array<unsigned short, konst::bs> b,
-        std::array<unsigned short, konst::bs> c);
+    std::array<unsigned short, konst::bs> b,
+    std::array<unsigned short, konst::bs> c);
 std::array<unsigned short, konst::bs> try_sqr_find(
-        std::array<unsigned short, konst::bs> b,
-        std::array<unsigned short, konst::bs> c);
+    std::array<unsigned short, konst::bs> b,
+    std::array<unsigned short, konst::bs> c);
 std::array<unsigned short, konst::bs> try_row_find(
-        std::array<unsigned short, konst::bs> b,
-        std::array<unsigned short, konst::bs> c);
+    std::array<unsigned short, konst::bs> b,
+    std::array<unsigned short, konst::bs> c);
 std::array<unsigned short, konst::bs> solve_board(
-        std::array<unsigned short, konst::bs> b,
-        std::array<unsigned short, konst::bs> c);
+    std::array<unsigned short, konst::bs> b,
+    std::array<unsigned short, konst::bs> c);
 unsigned short set_xor_search(
-        std::array<unsigned short, konst::bs> c,
-        short start,
-        char type);
+    std::array<unsigned short, konst::bs> c,
+    short start,
+    char type);
 std::array<unsigned short, konst::bs> board_import(
     std::string filename);
 

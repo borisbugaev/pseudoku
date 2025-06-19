@@ -9,9 +9,9 @@ sudoku constants in a shared header
 
 namespace konst
 {
-    constexpr unsigned char sz{9};
-    constexpr unsigned char bs{81};
-    constexpr unsigned char sb{27};
+    constexpr unsigned char sz{9}; // must be a square number
+    constexpr unsigned char bs{81}; // sz squared
+    constexpr unsigned char sb{27}; // cube of sqrt(sz)
 }
 
 namespace pseud
@@ -36,6 +36,7 @@ namespace komm
     const std::string usr_fin{"solve"};
     const std::string usr_srch{"search"};
     const std::string usr_bexp{"export"};
+    const std::string usr_bimp{"import"};
 
     /*
     commands primarily used for debugging, etc
@@ -169,6 +170,41 @@ namespace alg_map
     };
 }
 
+namespace tra
+{
+    const std::unordered_map<short, short> nsform
+    {
+        {0, 0}, {1, 1}, {2, 2},
+        {3, 27}, {4, 28}, {5, 29},
+        {6, 54}, {7, 55}, {8, 56},
+        {9, 3}, {10, 4}, {11, 5},
+        {12, 30}, {13, 31}, {14, 32},
+        {15, 57}, {16, 58}, {17, 59},
+        {18, 6}, {19, 7}, {20, 8},
+        {21, 33}, {22, 34}, {23, 35},
+        {24, 60}, {25, 61}, {26,62},
+        {27, 9}, {28, 10}, {29, 11},
+        {30, 36}, {31, 37}, {32, 38},
+        {33, 63}, {34, 64}, {35, 65},
+        {36, 12}, {37, 13}, {38, 14},
+        {39, 39}, {40, 40}, {41, 41},
+        {42, 66}, {43, 67}, {44, 68},
+        {45, 15}, {46, 16}, {47, 17},
+        {48, 42}, {49, 43}, {50, 44},
+        {51, 69}, {52, 70}, {53, 71},
+        {54, 18}, {55, 19}, {56, 20},
+        {57, 45}, {58, 46}, {59, 47},
+        {60, 72}, {61, 73}, {62, 74},
+        {63, 21}, {64, 22}, {65, 23},
+        {66, 48}, {67, 49}, {68, 50},
+        {69, 75}, {70, 76}, {71, 77},
+        {72, 24}, {73, 25}, {74, 26},
+        {75, 51}, {76, 52}, {77, 53},
+        {78, 78}, {79, 79}, {80, 80}
+    };
+}
+
+#ifdef DEBUG
 constexpr std::array<unsigned short, konst::bs> sref{
     4, 3, 1, 9, 6, 2, 8, 7, 5, 
     6, 2, 7, 5, 4, 9, 1, 8, 3, 
@@ -180,3 +216,4 @@ constexpr std::array<unsigned short, konst::bs> sref{
     8, 1, 5, 6, 7, 3, 9, 4, 2, 
     5, 9, 4, 2, 6, 7, 1, 3, 8
 };
+#endif

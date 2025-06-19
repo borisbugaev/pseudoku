@@ -11,8 +11,9 @@ TODO: square set eval, set striking
 */
 
 void draw_candidates(unsigned short candidat);
-std::array<unsigned short, konst::bs> init_can(
-    std::array<unsigned short, konst::bs> board);
+std::array<unsigned short, konst::bs> set_can(
+    std::array<unsigned short, konst::bs> board,
+    std::array<unsigned short, konst::bs> c_board);
 void draw_board(std::array<unsigned short, konst::bs> b);
 
 
@@ -35,14 +36,14 @@ returns actual value represented in candidates when ==1
 */
 constexpr short equiv(unsigned short c)
 {
-    return ((0x100 & c)/0x100) * 9
-    + ((0x80 & c)/0x80) * 8
-    + ((0x40 & c)/0x40) * 7
-    + ((0x20 & c)/0x20) * 6
-    + ((0x10 & c)/0x10) * 5
-    + ((0x08 & c)/0x08) * 4
-    + ((0x04 & c)/0x04) * 3
-    + ((0x02 & c)/0x02) * 2
+    return ((0x100 & c) ? 9 : 0)
+    + ((0x80 & c) ? 8 : 0)
+    + ((0x40 & c) ? 7 : 0)
+    + ((0x20 & c) ? 6 : 0)
+    + ((0x10 & c) ? 5 : 0)
+    + ((0x08 & c) ? 4 : 0)
+    + ((0x04 & c) ? 3 : 0)
+    + ((0x02 & c) ? 2 : 0)
     + (0x01 & c);
 }
 
@@ -58,6 +59,24 @@ bool blank_check(
     }
     return false;
 }
+
+bool high_bit_count(
+    unsigned short bit_map,
+    short quant)
+{
+    short counter{0x0};
+    for (short i = 0x0; i < 0x10; i++)
+    {
+        counter += 0x1 & (bit_map >> i);
+        if (counter > quant)
+        {
+            return false;
+        }
+    }
+    bool is_equal{(counter == quant) ? true : false};
+    return is_equal;
+}
+
 
 short high_bit_count(
     unsigned short bit_map)
@@ -181,7 +200,7 @@ std::array<unsigned short, konst::bs> sqr_prune(
             {
                 continue;
             }
-            else if (high_bit_count(c[i+j]) == 2)
+            else if (high_bit_count(c[i+j], 2))
             {
                 for (short k = j + 1; k < konst::sz - j; k++)
                 {
@@ -189,30 +208,23 @@ std::array<unsigned short, konst::bs> sqr_prune(
                 }
             }
         }
-        for (short j = 0; j < konst::sz; j++)
+        if (high_bit_count(candidate_pair, 2))
         {
-            if (j == 0 && high_bit_count(candidate_pair) != 2)
+            for (short j = 0; j < konst::sz; j++)
             {
-                break;
+                if (c[i+j] != candidate_pair && high_bit_count(c[i+j]) > 1)
+                {
+                    #ifdef DEBUG
+                    std::cout << "sqr_set " << algae::to[i+j] << " from ";
+                    draw_candidates(c[i+j]);
+                    #endif
+                    c[i+j] &= ~candidate_pair;
+                    #ifdef DEBUG
+                    std::cout << "\t   to   ";
+                    draw_candidates(c[i+j]);
+                    #endif
+                }
             }
-            if (c[i+j] != candidate_pair && high_bit_count(c[i+j]) > 1)
-            {
-                #ifdef DEBUG
-                std::cout << "sqr_set " << algae::to[i+j] << " from ";
-                draw_candidates(c[i+j]);
-                #endif
-                c[i+j] &= ~candidate_pair;
-                #ifdef DEBUG
-                std::cout << "\t   to   ";
-                draw_candidates(c[i+j]);
-                #endif
-            }
-            #ifdef DEBUG_is
-            else{
-            std::cout << "sqr_____" << algae::to[i+j] << "_is ";
-            draw_candidates(c[i+j]);
-            }
-            #endif
         }
         candidate_pair = 0x0;
         // if 2 squares each have 2 candidates
@@ -236,7 +248,7 @@ std::array<unsigned short, konst::bs> row_prune(
             {
                 continue;
             }
-            else if (high_bit_count(c[r_1]) == 2)
+            else if (high_bit_count(c[r_1], 2))
             {
                 for (short k = j + 1; k < konst::sz - j; k++)
                 {
@@ -244,41 +256,26 @@ std::array<unsigned short, konst::bs> row_prune(
                     candidate_pair = c[r_1] == c[r_2] ? c[r_1] : candidate_pair;
                 }
             }
-            #ifdef DEBUG_REV
-            std::cout << "at " << algae::to[r_1] << ' ';
-            draw_candidates(c[r_1]);
-            #endif
        }
-       for (short j = 0; j < konst::sz; j++)
-       {
-            if (j == 0 && high_bit_count(candidate_pair) != 2)
+        if (high_bit_count(candidate_pair, 2))
+        {
+            for (short j = 0; j < konst::sz; j++)
             {
-                break;
+                const short r{grp(i, j)};
+                if (c[r] != candidate_pair && high_bit_count(c[r]) > 1)
+                {
+                    #ifdef DEBUG
+                    std::cout << "row_set " << algae::to[r] << " from ";
+                    draw_candidates(c[r]);
+                    #endif
+                    c[r] &= ~candidate_pair;
+                    #ifdef DEBUG
+                    std::cout << "\t   to   ";
+                    draw_candidates(c[r]);
+                    #endif
+                }
             }
-            const short r{grp(i, j)};
-            if (c[r] != candidate_pair && high_bit_count(c[r]) > 1)
-            {
-                #ifdef DEBUG
-                std::cout << "row_set " << algae::to[r] << " from ";
-                draw_candidates(c[r]);
-                #endif
-                c[r] &= ~candidate_pair;
-                #ifdef DEBUG_REV
-                std::cout << "pair__is ";
-                draw_candidates(candidate_pair);
-                #endif
-                #ifdef DEBUG
-                std::cout << "\t   to   ";
-                draw_candidates(c[r]);
-                #endif
-            }
-            #ifdef DEBUG_is
-            else{
-            std::cout << "row_____" << algae::to[r] << "_is ";
-            draw_candidates(c[r]);
-            }
-            #endif
-       }
+        }
        candidate_pair = 0x0;
     }
     return c;
@@ -297,7 +294,7 @@ std::array<unsigned short, konst::bs> col_prune(
             {
                 continue;
             }
-            else if (high_bit_count(c[j]) == 2)
+            else if (high_bit_count(c[j], 2))
             {
                 for (short k = (j + 3); k < r + konst::sb; k+=3)
                 {
@@ -305,30 +302,23 @@ std::array<unsigned short, konst::bs> col_prune(
                 }
             }
         }
-        for (short j = r; j < r + konst::sb; j+=3)
+        if (high_bit_count(candidate_pair, 2))
         {
-            if (j == r && high_bit_count(candidate_pair) != 2)
+            for (short j = r; j < r + konst::sb; j+=3)
             {
-                break;
+                if (c[j] != candidate_pair && high_bit_count(c[j]) > 1)
+                {
+                    #ifdef DEBUG
+                    std::cout << "col_set " << algae::to[j] << " from ";
+                    draw_candidates(c[j]);
+                    #endif
+                    c[j] &= ~candidate_pair;
+                    #ifdef DEBUG
+                    std::cout <<"\t   to   ";
+                    draw_candidates(c[j]);
+                    #endif
+                }
             }
-            else if (c[j] != candidate_pair && high_bit_count(c[j]) > 1)
-            {
-                #ifdef DEBUG
-                std::cout << "col_set " << algae::to[j] << " from ";
-                draw_candidates(c[j]);
-                #endif
-                c[j] &= ~candidate_pair;
-                #ifdef DEBUG
-                std::cout <<"\t   to   ";
-                draw_candidates(c[j]);
-                #endif
-            }
-            #ifdef DEBUG_is
-            else{
-            std::cout << "col_____" << algae::to[j] << "_is ";
-            draw_candidates(c[j]);
-            }
-            #endif
         }
         candidate_pair = 0x0;
     }
@@ -361,7 +351,7 @@ std::array<unsigned short, konst::bs> try_solo_find(
         }
         std::cout << "sol_i_" << b[index] << "_at_" << algae::to[index] << '\n';
         #endif
-        c = init_can(b);
+        c = set_can(b, c);
         index = (value == 0) ? (-1) : find_solo(b, c);
     }
 
@@ -395,7 +385,7 @@ std::array<unsigned short, konst::bs> try_row_find(
                 #endif
             }
         }
-        c = init_can(b);
+        c = set_can(b, c);
         value = row_find(c);
     }
     return b;
@@ -426,7 +416,7 @@ std::array<unsigned short, konst::bs> try_col_find(
                 std::cout << "col_i_" << b[i] << "_at_" << algae::to[i] << '\n';
                 #endif
             }
-        c = init_can(b);
+        c = set_can(b, c);
         }
         value = col_find(c);
     }
@@ -459,7 +449,7 @@ std::array<unsigned short, konst::bs> try_sqr_find(
                 #endif
             }
         }
-        c = init_can(b);
+        c = set_can(b, c);
         value = sqr_find(c);
     }
     return b;

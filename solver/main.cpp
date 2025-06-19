@@ -13,13 +13,17 @@ const std::string ARG_TYPE{"ENTER NAME OF "};
         std::array<unsigned short, konst::bs> board,
         std::array<unsigned short, konst::bs> c_board);
     unsigned short candidates(unsigned char locale, 
-        std::array<unsigned short, konst::bs> board);
+        std::array<unsigned short, konst::bs> board,
+        std::array<unsigned short, konst::bs> c_board);
     void draw_board(std::array<unsigned short, konst::bs> b);
     void draw_candidates(unsigned short candidat);
     std::array<unsigned short, konst::bs> init_blank();
     std::array<unsigned short, konst::bs> init_from_file(std::string filename);
-    std::array<unsigned short, konst::bs> init_can(
-        std::array<unsigned short, konst::bs> board);
+    std::array<unsigned short, konst::bs> set_can(
+        std::array<unsigned short, konst::bs> board,
+        std::array<unsigned short, konst::bs> c_board);
+std::array<unsigned short, konst::bs> initialize_cb(
+    std::array<unsigned short, konst::bs> c_board);
 
 int main(int argc, char** argv)
 {
@@ -43,7 +47,8 @@ int main(int argc, char** argv)
     }
     draw_board(board);
     // with board initialized
-    c_board = init_can(board);
+    c_board = initialize_cb(c_board);
+    c_board = set_can(board, c_board);
     std::array<unsigned short, konst::bs> tboard;
     bool usr_quit{false};
     std::string inputstr{};
@@ -55,7 +60,7 @@ int main(int argc, char** argv)
         tboard = kommand(inputstr, board, c_board);
         if (tboard != board)
         {
-            c_board = init_can(tboard);
+            c_board = set_can(tboard, c_board);
             board = tboard;
         }
         std::cout << pseud::prompt;

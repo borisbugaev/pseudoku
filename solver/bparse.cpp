@@ -133,9 +133,10 @@ unsigned short set_parse_sqr(std::array<unsigned short, konst::bs> board,
 calc valid values at given index
 */
 unsigned short candidates(unsigned char locale, 
-    std::array<unsigned short, konst::bs> board)
+    std::array<unsigned short, konst::bs> board,
+    std::array<unsigned short, konst::bs> c_board)
 {
-    unsigned short can{0x1ff};
+    unsigned short can{c_board[locale]};
     return can 
     & ~set_parse_col(board, my_col(locale)) 
     & ~set_parse_row(board, my_row(locale))

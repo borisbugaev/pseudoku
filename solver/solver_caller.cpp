@@ -22,8 +22,9 @@ std::array<unsigned short, konst::bs> try_solo_find(
     std::array<unsigned short, konst::bs> c);
 bool blank_check(
     std::array<unsigned short, konst::bs> b);
-std::array<unsigned short, konst::bs> init_can(
-    std::array<unsigned short, konst::bs> board);
+std::array<unsigned short, konst::bs> set_can(
+    std::array<unsigned short, konst::bs> board,
+    std::array<unsigned short, konst::bs> c_board);
 void draw_board(std::array<unsigned short, konst::bs> b);
 
 std::array<unsigned short, konst::bs> solve_board(
@@ -42,7 +43,7 @@ std::array<unsigned short, konst::bs> solve_board(
         {
             counter += diff_magn(b, temp_b);
             b = temp_b;
-            c = init_can(b);
+            c = set_can(b, c);
             //draw_board(b);
         }
         blank = blank_check(b);
@@ -51,7 +52,7 @@ std::array<unsigned short, konst::bs> solve_board(
         {
             counter += diff_magn(b, temp_b);
             b = temp_b;
-            c = init_can(b);
+            c = set_can(b, c);
             //draw_board(b);
         }
         blank = blank_check(b);
@@ -60,7 +61,7 @@ std::array<unsigned short, konst::bs> solve_board(
         {
             counter += diff_magn(b, temp_b);
             b = temp_b;
-            c = init_can(b);
+            c = set_can(b, c);
             //draw_board(b);
         }
         blank = blank_check(b);
@@ -69,7 +70,7 @@ std::array<unsigned short, konst::bs> solve_board(
         {
             counter += diff_magn(b, temp_b);
             b = temp_b;
-            c = init_can(b);
+            c = set_can(b, c);
             //draw_board(b);
         }
         if (counter == c_i)

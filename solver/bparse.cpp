@@ -41,7 +41,7 @@ constexpr unsigned char my_row(unsigned char locale)
         default:
             break;
     }
-    return ((locale % konst::sz) / 3) + offset_f * 3;
+    return ((locale % konst::sz) / konst::rt_sz) + offset_f * konst::rt_sz;
 }
 
 /*
@@ -69,28 +69,28 @@ constexpr unsigned char my_col(unsigned char locale)
         default:
             break;
     }
-    return locale % 3 + offset_f * 3;
+    return locale % konst::rt_sz + offset_f * konst::rt_sz;
 }
 
 /*
 calc set of int in given row
 */
-short set_parse_row(std::array<short, konst::bs> board, 
+short set_parse_row(std::array<short, konst::sqr_sz> board, 
     unsigned char row)
 {
     short set_row{0x0};
-    long row_start{row * 3};
+    long row_start{row * konst::rt_sz};
     long row_indices[konst::sz]
     {   
         row_start,
         row_start + 1,
         row_start + 2,
-        row_start + konst::sb,
-        row_start + konst::sb + 1,
-        row_start + konst::sb + 2,
-        row_start + konst::sb * 2,
-        row_start + konst::sb * 2 + 1,
-        row_start + konst::sb * 2 + 2};
+        row_start + konst::th_sz,
+        row_start + konst::th_sz + 1,
+        row_start + konst::th_sz + 2,
+        row_start + konst::th_sz * 2,
+        row_start + konst::th_sz * 2 + 1,
+        row_start + konst::th_sz * 2 + 2};
     for (short i = 0; i < konst::sz; i++)
     {
         short board_item{static_cast<short>(board[row_indices[i]] < 0 ? std::abs(board[row_indices[i]]) : 0)};
@@ -102,13 +102,13 @@ short set_parse_row(std::array<short, konst::bs> board,
 /*
 calc set of int in given column
 */
-short set_parse_col(std::array<short, konst::bs> board, 
+short set_parse_col(std::array<short, konst::sqr_sz> board, 
     unsigned char col)
 {
     short set_col{0x0};
-    long col_start{col/3 * 24 + col};
-    long col_end{konst::sz * 3 + col_start};
-    for (long i = col_start; i < col_end; i += 3)
+    long col_start{col/konst::rt_sz * 24 + col};
+    long col_end{konst::sz * konst::rt_sz + col_start};
+    for (long i = col_start; i < col_end; i += konst::rt_sz)
     {
         short board_item{static_cast<short>(board[i] < 0 ? std::abs(board[i]) : 0)};
         set_col |= (1 << (board_item - 1));
@@ -119,7 +119,7 @@ short set_parse_col(std::array<short, konst::bs> board,
 /*
 calc set of int in given square
 */
-short set_parse_sqr(std::array<short, konst::bs> board, 
+short set_parse_sqr(std::array<short, konst::sqr_sz> board, 
     unsigned char sqr)
 {
     short set_sqr{0x0};
@@ -137,7 +137,7 @@ short set_parse_sqr(std::array<short, konst::bs> board,
 calc valid values at given index
 */
 short candidates(unsigned char locale, 
-    std::array<short, konst::bs> board)
+    std::array<short, konst::sqr_sz> board)
 {
     short can{board[locale]};
     return can 

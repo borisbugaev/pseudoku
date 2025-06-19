@@ -3,32 +3,32 @@
 #include <chrono>
 
 
-std::array<short, konst::bs> prune(
-    std::array<short, konst::bs> b);
-std::array<short, konst::bs> try_sqr_find(
-    std::array<short, konst::bs> b);
+std::array<short, konst::sqr_sz> prune(
+    std::array<short, konst::sqr_sz> b);
+std::array<short, konst::sqr_sz> try_sqr_find(
+    std::array<short, konst::sqr_sz> b);
 short diff_magn(
-    std::array<short, konst::bs> b_1,
-    std::array<short, konst::bs> b_2);
-std::array<short, konst::bs> try_col_find(
-    std::array<short, konst::bs> b);
-std::array<short, konst::bs> try_row_find(
-    std::array<short, konst::bs> b);
-std::array<short, konst::bs> try_solo_find(
-    std::array<short, konst::bs> b);
+    std::array<short, konst::sqr_sz> b_1,
+    std::array<short, konst::sqr_sz> b_2);
+std::array<short, konst::sqr_sz> try_col_find(
+    std::array<short, konst::sqr_sz> b);
+std::array<short, konst::sqr_sz> try_row_find(
+    std::array<short, konst::sqr_sz> b);
+std::array<short, konst::sqr_sz> try_solo_find(
+    std::array<short, konst::sqr_sz> b);
 bool blank_check(
-    std::array<short, konst::bs> b);
-std::array<short, konst::bs> set_can(
-    std::array<short, konst::bs> board);
-void draw_board(std::array<short, konst::bs> b);
+    std::array<short, konst::sqr_sz> b);
+std::array<short, konst::sqr_sz> set_can(
+    std::array<short, konst::sqr_sz> board);
+void draw_board(std::array<short, konst::sqr_sz> b);
 
-std::array<short, konst::bs> solve_board(
-    std::array<short, konst::bs> b)
+std::array<short, konst::sqr_sz> solve_board(
+    std::array<short, konst::sqr_sz> b)
 {
     auto start = std::chrono::steady_clock::now();
     short counter{0}, c_i{0};
     bool blank{blank_check(b)};
-    std::array<short, konst::bs> temp_b;
+    std::array<short, konst::sqr_sz> temp_b;
     while (blank == true)
     {
         c_i = counter;

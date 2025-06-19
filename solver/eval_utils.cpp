@@ -11,9 +11,9 @@ TODO: square set eval, set striking
 */
 
 void draw_candidates(short candidat);
-std::array<short, konst::bs> set_can(
-    std::array<short, konst::bs> board);
-void draw_board(std::array<short, konst::bs> b);
+std::array<short, konst::sqr_sz> set_can(
+    std::array<short, konst::sqr_sz> board);
+void draw_board(std::array<short, konst::sqr_sz> b);
 
 
 /*
@@ -25,8 +25,8 @@ const short grp(
 {
     short id{row_id};
     id += index % 0x3;
-    id += (index >= 0x3) ? konst::sb : 0;
-    id += (index >= 0x6) ? konst::sb : 0;
+    id += (index >= 0x3) ? konst::th_sz : 0;
+    id += (index >= 0x6) ? konst::th_sz : 0;
     return id;
 }
 
@@ -47,9 +47,9 @@ constexpr short equiv(short c)
 }
 
 bool blank_check(
-    std::array<short, konst::bs> b)
+    std::array<short, konst::sqr_sz> b)
 {
-    for (short i = 0; i < konst::bs; i++)
+    for (short i = 0; i < konst::sqr_sz; i++)
     {
         if (b[i] <= 0)
         {
@@ -106,9 +106,9 @@ returns index of first square where there is ==1 candidate
 if none, returns -1
 */
 short find_solo(
-    std::array<short, konst::bs> b)
+    std::array<short, konst::sqr_sz> b)
 {
-    for (short i = 0; i < konst::bs; i++)
+    for (short i = 0; i < konst::sqr_sz; i++)
     {
         if ((b[i] & (b[i] - 1)) == 0 && b[i] > 0)
         {
@@ -119,15 +119,15 @@ short find_solo(
 }
 
 short set_xor_search(
-    std::array<short, konst::bs> b,
+    std::array<short, konst::sqr_sz> b,
     short start,
     char type)
 {
     short add_only_set{0x0}, my_set{0x0};
-    const short i_col{0x3}, i_els{0x1}, f_row{0x0};
+    const short i_col{konst::rt_sz}, i_els{0x1}, f_row{0x0};
     short by{(type == 'c') ? i_col : i_els};
     short from{(type == 'r') ? f_row : start};
-    short buf{(type == 'c') ? konst::sb : konst::sz};
+    short buf{(type == 'c') ? konst::th_sz : konst::sz};
     for (short i = from; i < (from + buf); i+=by)
     {
         const short j{(type == 'r') ? grp(start, i) : i};
@@ -139,10 +139,10 @@ short set_xor_search(
 }
 
 std::array<short, 0x2> sqr_find(
-    std::array<short, konst::bs> c)
+    std::array<short, konst::sqr_sz> c)
 {
     short sqr_set{0x0};
-    for (short i = 0; i < konst::bs; i+=9)
+    for (short i = 0; i < konst::sqr_sz; i += konst::sz)
     {
         sqr_set = set_xor_search(c, i, 's');
         if (sqr_set != 0)
@@ -155,10 +155,10 @@ std::array<short, 0x2> sqr_find(
 }
 
 std::array<short, 0x2> row_find(
-    std::array<short, konst::bs> c)
+    std::array<short, konst::sqr_sz> c)
 {
     short row_set{0x0};
-    for (short i = 0; i < konst::sb; i+=3)
+    for (short i = 0; i < konst::th_sz; i += konst::rt_sz)
     {
         row_set = set_xor_search(c, i, 'r');
         if (row_set != 0)
@@ -171,7 +171,7 @@ std::array<short, 0x2> row_find(
 }
 
 std::array<short, 0x2> col_find(
-    std::array<short, konst::bs> c)
+    std::array<short, konst::sqr_sz> c)
 {
     short col_set{0x0}, j{};
     for (short i = 0; i < konst::sz; i++)
@@ -187,11 +187,11 @@ std::array<short, 0x2> col_find(
     return {0x5, 0x5};
 }
 
-std::array<short, konst::bs> sqr_prune(
-    std::array<short, konst::bs> c)
+std::array<short, konst::sqr_sz> sqr_prune(
+    std::array<short, konst::sqr_sz> c)
 {
     short candidate_pair{0x0};
-    for (short i = 0; i < konst::bs; i += konst::sz)
+    for (short i = 0; i < konst::sqr_sz; i += konst::sz)
     {
         for (short j = 0; j < konst::sz; j++)
         {
@@ -237,11 +237,11 @@ std::array<short, konst::bs> sqr_prune(
     return c;
 }
 
-std::array<short, konst::bs> row_prune(
-    std::array<short, konst::bs> c)
+std::array<short, konst::sqr_sz> row_prune(
+    std::array<short, konst::sqr_sz> c)
 {
     short candidate_pair{0x0};
-    for (short i = 0; i < konst::sb; i+=3)
+    for (short i = 0; i < konst::th_sz; i += konst::rt_sz)
     {
        for (short j = 0; j < konst::sz; j++)
        {
@@ -288,14 +288,14 @@ std::array<short, konst::bs> row_prune(
     return c;
 }
 
-std::array<short, konst::bs> col_prune(
-    std::array<short, konst::bs> c)
+std::array<short, konst::sqr_sz> col_prune(
+    std::array<short, konst::sqr_sz> c)
 {
     short candidate_pair{0x0};
     for (short i = 0; i < konst::sz; i++)
     {
         const short r{grp(0, i)};
-        for (short j = r; j < r + konst::sb; j+=3)
+        for (short j = r; j < r + konst::th_sz; j += konst::rt_sz)
         {
             if (c[j] <= 0)
             {
@@ -303,7 +303,7 @@ std::array<short, konst::bs> col_prune(
             }
             else if (high_bit_count(c[j], 2))
             {
-                for (short k = (j + 3); k < r + konst::sb; k+=3)
+                for (short k = (j + 3); k < r + konst::th_sz; k += konst::rt_sz)
                 {
                     candidate_pair = c[j] == c[k] ? c[j] : candidate_pair;
                 }
@@ -311,7 +311,7 @@ std::array<short, konst::bs> col_prune(
         }
         if (high_bit_count(candidate_pair, 2))
         {
-            for (short j = r; j < r + konst::sb; j+=3)
+            for (short j = r; j < r + konst::th_sz; j += konst::rt_sz)
             {
                 if (c[j] <= 0)
                 {
@@ -336,8 +336,8 @@ std::array<short, konst::bs> col_prune(
     return c;
 }
 
-std::array<short, konst::bs> prune(
-    std::array<short, konst::bs> c)
+std::array<short, konst::sqr_sz> prune(
+    std::array<short, konst::sqr_sz> c)
 {
     c = sqr_prune(c);
     c = row_prune(c);
@@ -345,8 +345,8 @@ std::array<short, konst::bs> prune(
     return c;
 }
 
-std::array<short, konst::bs> try_solo_find(
-    std::array<short, konst::bs> b)
+std::array<short, konst::sqr_sz> try_solo_find(
+    std::array<short, konst::sqr_sz> b)
 {
     short index = find_solo(b);
     while (index != (-1))
@@ -367,8 +367,8 @@ std::array<short, konst::bs> try_solo_find(
     return b;
 }
 
-std::array<short, konst::bs> try_row_find(
-    std::array<short, konst::bs> b)
+std::array<short, konst::sqr_sz> try_row_find(
+    std::array<short, konst::sqr_sz> b)
 {
     if (!blank_check(b))
     {
@@ -400,8 +400,8 @@ std::array<short, konst::bs> try_row_find(
     return b;
 }
 
-std::array<short, konst::bs> try_col_find(
-    std::array<short, konst::bs> b)
+std::array<short, konst::sqr_sz> try_col_find(
+    std::array<short, konst::sqr_sz> b)
 {
     if (!blank_check(b))
     {
@@ -410,7 +410,7 @@ std::array<short, konst::bs> try_col_find(
     std::array<short, 0x2> value = col_find(b);
     while (value[0] != 0x5)
     {
-        for (short i = value[1]; i < (value[1] + konst::sb); i+=3)
+        for (short i = value[1]; i < (value[1] + konst::th_sz); i += konst::rt_sz)
         {
             if ((value[0] & b[i]) != 0 && b[i] > 0)
             {
@@ -431,8 +431,8 @@ std::array<short, konst::bs> try_col_find(
     return b;
 }
 
-std::array<short, konst::bs> try_sqr_find(
-    std::array<short, konst::bs> b)
+std::array<short, konst::sqr_sz> try_sqr_find(
+    std::array<short, konst::sqr_sz> b)
 {
     if (!blank_check(b))
     {
@@ -463,11 +463,11 @@ std::array<short, konst::bs> try_sqr_find(
 }
 
 short diff_magn(
-    std::array<short, konst::bs> b_1,
-    std::array<short, konst::bs> b_2)
+    std::array<short, konst::sqr_sz> b_1,
+    std::array<short, konst::sqr_sz> b_2)
 {
     short diff_counter{0};
-    for (short i = 0; i < konst::bs; i++)
+    for (short i = 0; i < konst::sqr_sz; i++)
     {
         diff_counter += (b_1[i] == b_2[i]) ? 0 : 1;
     }

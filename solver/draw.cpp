@@ -38,7 +38,7 @@ std::string value_str(
 single line of board
 */
 std::string board_line(
-    std::array<short, konst::bs> b,
+    std::array<short, konst::sqr_sz> b,
     unsigned short f, 
     char flag)
 {
@@ -48,17 +48,17 @@ std::string board_line(
         + ' '
         + value_str(b[f + 2])
         + ' ' + '|' + ' '
-        + value_str(b[f + konst::sb])
+        + value_str(b[f + konst::th_sz])
         + ' '
-        + value_str(b[f + konst::sb + 1])
+        + value_str(b[f + konst::th_sz + 1])
         + ' '
-        + value_str(b[f + konst::sb + 2])
+        + value_str(b[f + konst::th_sz + 2])
         + ' ' + '|' + ' '
-        + value_str(b[f + konst::sb * 2])
+        + value_str(b[f + konst::th_sz * 2])
         + ' '
-        + value_str(b[f + konst::sb * 2 + 1])
+        + value_str(b[f + konst::th_sz * 2 + 1])
         + ' '
-        + value_str(b[f + konst::sb * 2 + 2])
+        + value_str(b[f + konst::th_sz * 2 + 2])
     };
     switch (flag)
     {
@@ -136,11 +136,11 @@ void draw_candidates(short candidat)
 /*
 draw board as it should appear
 */
-void draw_board(std::array<short, konst::bs> b)
+void draw_board(std::array<short, konst::sqr_sz> b)
 {
-    for (unsigned short f = 0; f < konst::sb; f+=3)
+    for (unsigned short f = 0; f < konst::th_sz; f += konst::rt_sz)
     {
-        if (f/konst::sz != 0 && f%konst::sz == 0)
+        if (f / konst::sz != 0 && f % konst::sz == 0)
         {
             std::cout << pseud::sqr_x_brdr << '\n';
         }
@@ -148,11 +148,11 @@ void draw_board(std::array<short, konst::bs> b)
     }
 }
 
-void draw_cboard(std::array<short, konst::bs> b)
+void draw_cboard(std::array<short, konst::sqr_sz> b)
 {
-    for (unsigned short f = 0; f < konst::sb; f+=3)
+    for (unsigned short f = 0; f < konst::th_sz; f += konst::rt_sz)
     {
-        if (f/konst::sz != 0 && f%konst::sz == 0)
+        if (f / konst::sz != 0 && f % konst::sz == 0)
         {
             std::cout << pseud::sqr_x_brdr << '\n';
         }
@@ -163,7 +163,7 @@ void draw_cboard(std::array<short, konst::bs> b)
 /*
 draw algebraic notation reference next to the board
 */
-void draw_boardref(std::array<short, konst::bs> b)
+void draw_boardref(std::array<short, konst::sqr_sz> b)
 {
     std::cout << "  9 8 7   6 5 4   3 2 1\n";
     std::cout << board_line(b, 0, 'a');

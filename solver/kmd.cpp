@@ -5,38 +5,38 @@
 #include <unordered_map>
 
 
-std::array<short, konst::bs> init_from_file(std::string filename);
+std::array<short, konst::sqr_sz> init_from_file(std::string filename);
 short board_export(
-    std::array<short, konst::bs> board,
+    std::array<short, konst::sqr_sz> board,
     std::string filename);
 short candidates(unsigned char locale, 
-    std::array<short, konst::bs> board);
-void draw_board(std::array<short, konst::bs> b);
-void draw_cboard(std::array<short, konst::bs> c);
+    std::array<short, konst::sqr_sz> board);
+void draw_board(std::array<short, konst::sqr_sz> b);
+void draw_cboard(std::array<short, konst::sqr_sz> c);
 void draw_candidates(short candidat);
-void draw_boardref(std::array<short, konst::bs> b);
+void draw_boardref(std::array<short, konst::sqr_sz> b);
 short equiv(short c);
 short find_solo(
-    std::array<short, konst::bs> b);
-std::array<short, konst::bs> try_solo_find(
-    std::array<short, konst::bs> b);
-std::array<short, konst::bs> try_sqr_find(
-    std::array<short, konst::bs> b);
-std::array<short, konst::bs> try_row_find(
-    std::array<short, konst::bs> b);
-std::array<short, konst::bs> solve_board(
-    std::array<short, konst::bs> b);
+    std::array<short, konst::sqr_sz> b);
+std::array<short, konst::sqr_sz> try_solo_find(
+    std::array<short, konst::sqr_sz> b);
+std::array<short, konst::sqr_sz> try_sqr_find(
+    std::array<short, konst::sqr_sz> b);
+std::array<short, konst::sqr_sz> try_row_find(
+    std::array<short, konst::sqr_sz> b);
+std::array<short, konst::sqr_sz> solve_board(
+    std::array<short, konst::sqr_sz> b);
 short set_xor_search(
-    std::array<short, konst::bs> b,
+    std::array<short, konst::sqr_sz> b,
     short start,
     char type);
-std::array<short, konst::bs> board_import(
+std::array<short, konst::sqr_sz> board_import(
     std::string filename);
 
 
-std::array<short, konst::bs> kommand(
+std::array<short, konst::sqr_sz> kommand(
     std::string input, 
-    std::array<short, konst::bs> board)
+    std::array<short, konst::sqr_sz> board)
 {
     if (input.compare(komm::usr_exit) == 0)
     {

@@ -10,23 +10,23 @@ TODO:
 */
 
 short candidates(unsigned char locale, 
-    std::array<short, konst::bs> board);
+    std::array<short, konst::sqr_sz> board);
 std::string board_line(
-    std::array<short, konst::bs> b,
+    std::array<short, konst::sqr_sz> b,
     unsigned short f, 
     char flag);
-std::array<short, konst::bs> prune(
-    std::array<short, konst::bs> c);
+std::array<short, konst::sqr_sz> prune(
+    std::array<short, konst::sqr_sz> c);
 /*
 init board from file
 */
-std::array<short, konst::bs> init_from_file(std::string filename)
+std::array<short, konst::sqr_sz> init_from_file(std::string filename)
 {
     std::ifstream file{filename};
-    std::array<short, konst::bs> board{};
+    std::array<short, konst::sqr_sz> board{};
     char l{};
     short iterator{0};
-    while (file.get(l) && iterator < konst::bs)
+    while (file.get(l) && iterator < konst::sqr_sz)
     {
         if ('0' <= l && l <= '9')
         {
@@ -38,14 +38,14 @@ std::array<short, konst::bs> init_from_file(std::string filename)
     return board;
 }
 
-std::array<short, konst::bs> board_import(
+std::array<short, konst::sqr_sz> board_import(
     std::string filename)
 {
     std::ifstream file{filename};
-    std::array<short, konst::bs> board{};
+    std::array<short, konst::sqr_sz> board{};
     char l{};
     short iterator{0};
-    while (file.get(l) && iterator < konst::bs)
+    while (file.get(l) && iterator < konst::sqr_sz)
     {
         if ('0' <= l && l <= '9')
         {
@@ -60,20 +60,20 @@ std::array<short, konst::bs> board_import(
 /*
 init blank board;
 */
-std::array<short, konst::bs> init_blank()
+std::array<short, konst::sqr_sz> init_blank()
 {
-    std::array<short, konst::bs> board{};
-    for (short i = 0; i < konst::bs; i++)
+    std::array<short, konst::sqr_sz> board{};
+    for (short i = 0; i < konst::sqr_sz; i++)
     {
         board[i] = 0;
     }
     return board;
 }
 
-std::array<short, konst::bs> initialize_candidates(
-    std::array<short, konst::bs> board)
+std::array<short, konst::sqr_sz> initialize_candidates(
+    std::array<short, konst::sqr_sz> board)
 {
-    for (short i = 0; i < konst::bs; i++)
+    for (short i = 0; i < konst::sqr_sz; i++)
     {
         if (board[i] == 0)
         {
@@ -85,10 +85,10 @@ std::array<short, konst::bs> initialize_candidates(
 /*
 generate candidate board
 */
-std::array<short, konst::bs> set_can(
-    std::array<short, konst::bs> board)
+std::array<short, konst::sqr_sz> set_can(
+    std::array<short, konst::sqr_sz> board)
 {
-    for (short i = 0; i < konst::bs; i++)
+    for (short i = 0; i < konst::sqr_sz; i++)
     {
         if (board[i] >= 0)
         {
@@ -100,11 +100,11 @@ std::array<short, konst::bs> set_can(
 }
 
 short board_export(
-    std::array<short, konst::bs> board,
+    std::array<short, konst::sqr_sz> board,
     std::string filename)
 {
     std::ofstream file{filename};
-    for (short f = 0; f < konst::sb; f+=3)
+    for (short f = 0; f < konst::th_sz; f += konst::rt_sz)
     {
         if (f/konst::sz != 0 && f%konst::sz == 0)
         {
@@ -115,11 +115,11 @@ short board_export(
     return 0;
 }
 
-std::array<short, konst::bs> board_transformation(
-    std::array<short, konst::bs> b)
+std::array<short, konst::sqr_sz> board_transformation(
+    std::array<short, konst::sqr_sz> b)
 {
-    std::array<short, konst::bs> b_transformat{};
-    for (short ion = 0; ion < konst::bs; ion++)
+    std::array<short, konst::sqr_sz> b_transformat{};
+    for (short ion = 0; ion < konst::sqr_sz; ion++)
     {
         b_transformat[ion] = b[tra::nsform.at(ion)];
     }

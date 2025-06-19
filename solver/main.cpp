@@ -7,27 +7,23 @@ const int EXP_ARGC{2};
 const std::string EXP_ARGSV[EXP_ARGC]{"SELF", "INPUT FILE"};
 const std::string ARG_TYPE{"ENTER NAME OF "};
 
-std::array<unsigned short, konst::bs> kommand(
+std::array<short, konst::bs> kommand(
     std::string input, 
-    std::array<unsigned short, konst::bs> board,
-    std::array<unsigned short, konst::bs> c_board);
-unsigned short candidates(unsigned char locale, 
-    std::array<unsigned short, konst::bs> board,
-    std::array<unsigned short, konst::bs> c_board);
-void draw_board(std::array<unsigned short, konst::bs> b);
-void draw_candidates(unsigned short candidat);
-std::array<unsigned short, konst::bs> init_blank();
-std::array<unsigned short, konst::bs> init_from_file(std::string filename);
-std::array<unsigned short, konst::bs> set_can(
-    std::array<unsigned short, konst::bs> board,
-    std::array<unsigned short, konst::bs> c_board);
-std::array<unsigned short, konst::bs> initialize_cb(
-    std::array<unsigned short, konst::bs> c_board);
+    std::array<short, konst::bs> board);
+short candidates(unsigned char locale, 
+    std::array<short, konst::bs> board);
+void draw_board(std::array<short, konst::bs> b);
+void draw_candidates(short candidat);
+std::array<short, konst::bs> init_blank();
+std::array<short, konst::bs> init_from_file(std::string filename);
+std::array<short, konst::bs> set_can(
+    std::array<short, konst::bs> board);
+std::array<short, konst::bs> initialize_candidates(
+    std::array<short, konst::bs> c_board);
 
 int main(int argc, char** argv)
 {
-    std::array<unsigned short, konst::bs> board{};
-    std::array<unsigned short, konst::bs> c_board{};
+    std::array<short, konst::bs> board{};
     
     //boilerplate filename input init
     std::string input_arg[EXP_ARGC];
@@ -46,9 +42,9 @@ int main(int argc, char** argv)
     }
     draw_board(board);
     // with board initialized
-    c_board = initialize_cb(c_board);
-    c_board = set_can(board, c_board);
-    std::array<unsigned short, konst::bs> tboard;
+    board = initialize_candidates(board);
+    board = set_can(board);
+    std::array<short, konst::bs> tboard;
     bool usr_quit{false};
     std::string inputstr{};
     std::cout << pseud::hint;
@@ -56,10 +52,10 @@ int main(int argc, char** argv)
     std::cin >> inputstr;
     while (!usr_quit)
     {
-        tboard = kommand(inputstr, board, c_board);
+        tboard = kommand(inputstr, board);
         if (tboard != board)
         {
-            c_board = set_can(tboard, c_board);
+            board = set_can(tboard);
             board = tboard;
         }
         std::cout << pseud::prompt;

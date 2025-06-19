@@ -1,5 +1,6 @@
 #include "sudokonst.h"
 #include <array>
+#include <cstdlib>
 
 /*
 Functions for board-set-parsing re: sudoku
@@ -74,10 +75,10 @@ constexpr unsigned char my_col(unsigned char locale)
 /*
 calc set of int in given row
 */
-unsigned short set_parse_row(std::array<unsigned short, konst::bs> board, 
+short set_parse_row(std::array<short, konst::bs> board, 
     unsigned char row)
 {
-    unsigned short set_row{0x0};
+    short set_row{0x0};
     long row_start{row * 3};
     long row_indices[konst::sz]
     {   
@@ -92,7 +93,8 @@ unsigned short set_parse_row(std::array<unsigned short, konst::bs> board,
         row_start + konst::sb * 2 + 2};
     for (short i = 0; i < konst::sz; i++)
     {
-        set_row |= (1 << (board[row_indices[i]] - 1));
+        short board_item{static_cast<short>(board[row_indices[i]] < 0 ? std::abs(board[row_indices[i]]) : 0)};
+        set_row |= (1 << (board_item - 1));
     }
     return set_row;
 }
@@ -100,15 +102,16 @@ unsigned short set_parse_row(std::array<unsigned short, konst::bs> board,
 /*
 calc set of int in given column
 */
-unsigned short set_parse_col(std::array<unsigned short, konst::bs> board, 
+short set_parse_col(std::array<short, konst::bs> board, 
     unsigned char col)
 {
-    unsigned short set_col{0x0};
+    short set_col{0x0};
     long col_start{col/3 * 24 + col};
     long col_end{konst::sz * 3 + col_start};
     for (long i = col_start; i < col_end; i += 3)
     {
-        set_col |= (1 << (board[i] - 1));
+        short board_item{static_cast<short>(board[i] < 0 ? std::abs(board[i]) : 0)};
+        set_col |= (1 << (board_item - 1));
     }
     return set_col;
 }
@@ -116,15 +119,16 @@ unsigned short set_parse_col(std::array<unsigned short, konst::bs> board,
 /*
 calc set of int in given square
 */
-unsigned short set_parse_sqr(std::array<unsigned short, konst::bs> board, 
+short set_parse_sqr(std::array<short, konst::bs> board, 
     unsigned char sqr)
 {
-    unsigned short set_sqr{0x0};
+    short set_sqr{0x0};
     long start_sqr{sqr * konst::sz};
     long end_sqr{start_sqr + konst::sz};
     for (long i = start_sqr; i < end_sqr; i++)
     {
-        set_sqr |= (1 << (board[i] - 1));
+        short board_item{static_cast<short>(board[i] < 0 ? std::abs(board[i]) : 0)};
+        set_sqr |= (1 << (board_item - 1));
     }
     return set_sqr;
 }
@@ -132,11 +136,10 @@ unsigned short set_parse_sqr(std::array<unsigned short, konst::bs> board,
 /*
 calc valid values at given index
 */
-unsigned short candidates(unsigned char locale, 
-    std::array<unsigned short, konst::bs> board,
-    std::array<unsigned short, konst::bs> c_board)
+short candidates(unsigned char locale, 
+    std::array<short, konst::bs> board)
 {
-    unsigned short can{c_board[locale]};
+    short can{board[locale]};
     return can 
     & ~set_parse_col(board, my_col(locale)) 
     & ~set_parse_row(board, my_row(locale))

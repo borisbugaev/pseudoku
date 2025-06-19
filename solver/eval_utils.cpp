@@ -10,11 +10,10 @@ functions to be used in sudoku evaluation
 TODO: square set eval, set striking
 */
 
-void draw_candidates(unsigned short candidat);
-std::array<unsigned short, konst::bs> set_can(
-    std::array<unsigned short, konst::bs> board,
-    std::array<unsigned short, konst::bs> c_board);
-void draw_board(std::array<unsigned short, konst::bs> b);
+void draw_candidates(short candidat);
+std::array<short, konst::bs> set_can(
+    std::array<short, konst::bs> board);
+void draw_board(std::array<short, konst::bs> b);
 
 
 /*
@@ -34,7 +33,7 @@ const short grp(
 /*
 returns actual value represented in candidates when ==1
 */
-constexpr short equiv(unsigned short c)
+constexpr short equiv(short c)
 {
     return ((0x100 & c) ? 9 : 0)
     + ((0x80 & c) ? 8 : 0)
@@ -48,11 +47,11 @@ constexpr short equiv(unsigned short c)
 }
 
 bool blank_check(
-    std::array<unsigned short, konst::bs> b)
+    std::array<short, konst::bs> b)
 {
     for (short i = 0; i < konst::bs; i++)
     {
-        if (b[i] == 0)
+        if (b[i] <= 0)
         {
             return true;
         }
@@ -61,7 +60,7 @@ bool blank_check(
 }
 
 bool high_bit_count(
-    unsigned short bit_map,
+    short bit_map,
     short quant)
 {
     short counter{0x0};
@@ -79,7 +78,7 @@ bool high_bit_count(
 
 
 short high_bit_count(
-    unsigned short bit_map)
+    short bit_map)
 {
     short counter{0x0};
     for (short i = 0x0; i < 0x10; i++)
@@ -90,7 +89,7 @@ short high_bit_count(
 }
 
 short get_1st_mapped_short(
-    unsigned short bit_map)
+    short bit_map)
 {
     for (short i = 0x1; i < 0x200; i = i << 1)
     {
@@ -107,12 +106,11 @@ returns index of first square where there is ==1 candidate
 if none, returns -1
 */
 short find_solo(
-    std::array<unsigned short, konst::bs> b,
-    std::array<unsigned short, konst::bs> c)
+    std::array<short, konst::bs> b)
 {
     for (short i = 0; i < konst::bs; i++)
     {
-        if ((c[i] & (c[i] - 1)) == 0 && b[i] == 0)
+        if ((b[i] & (b[i] - 1)) == 0 && b[i] > 0)
         {
             return i;
         }
@@ -120,8 +118,8 @@ short find_solo(
     return -1;
 }
 
-unsigned short set_xor_search(
-    std::array<unsigned short, konst::bs> c,
+short set_xor_search(
+    std::array<short, konst::bs> b,
     short start,
     char type)
 {
@@ -133,14 +131,15 @@ unsigned short set_xor_search(
     for (short i = from; i < (from + buf); i+=by)
     {
         const short j{(type == 'r') ? grp(start, i) : i};
-        add_only_set |= my_set & c[j];
-        my_set ^= c[j];
+        const short cn_at_j{static_cast<short>(b[j] >= 0 ? b[j] : 0)};
+        add_only_set |= my_set & cn_at_j;
+        my_set ^= cn_at_j;
     }
     return my_set & ~add_only_set; //n-input 'true' xor
 }
 
 std::array<short, 0x2> sqr_find(
-    std::array<unsigned short, konst::bs> c)
+    std::array<short, konst::bs> c)
 {
     short sqr_set{0x0};
     for (short i = 0; i < konst::bs; i+=9)
@@ -156,7 +155,7 @@ std::array<short, 0x2> sqr_find(
 }
 
 std::array<short, 0x2> row_find(
-    std::array<unsigned short, konst::bs> c)
+    std::array<short, konst::bs> c)
 {
     short row_set{0x0};
     for (short i = 0; i < konst::sb; i+=3)
@@ -172,7 +171,7 @@ std::array<short, 0x2> row_find(
 }
 
 std::array<short, 0x2> col_find(
-    std::array<unsigned short, konst::bs> c)
+    std::array<short, konst::bs> c)
 {
     short col_set{0x0}, j{};
     for (short i = 0; i < konst::sz; i++)
@@ -188,15 +187,15 @@ std::array<short, 0x2> col_find(
     return {0x5, 0x5};
 }
 
-std::array<unsigned short, konst::bs> sqr_prune(
-    std::array<unsigned short, konst::bs> c)
+std::array<short, konst::bs> sqr_prune(
+    std::array<short, konst::bs> c)
 {
     short candidate_pair{0x0};
     for (short i = 0; i < konst::bs; i += konst::sz)
     {
         for (short j = 0; j < konst::sz; j++)
         {
-            if (c[i+j] == 0)
+            if (c[i+j] <= 0)
             {
                 continue;
             }
@@ -212,7 +211,11 @@ std::array<unsigned short, konst::bs> sqr_prune(
         {
             for (short j = 0; j < konst::sz; j++)
             {
-                if (c[i+j] != candidate_pair && high_bit_count(c[i+j]) > 1)
+                if (c[i+j] <= 0)
+                {
+                    continue;
+                }
+                else if (c[i+j] != candidate_pair && high_bit_count(c[i+j]) > 1)
                 {
                     #ifdef DEBUG
                     std::cout << "sqr_set " << algae::to[i+j] << " from ";
@@ -234,8 +237,8 @@ std::array<unsigned short, konst::bs> sqr_prune(
     return c;
 }
 
-std::array<unsigned short, konst::bs> row_prune(
-    std::array<unsigned short, konst::bs> c)
+std::array<short, konst::bs> row_prune(
+    std::array<short, konst::bs> c)
 {
     short candidate_pair{0x0};
     for (short i = 0; i < konst::sb; i+=3)
@@ -244,7 +247,7 @@ std::array<unsigned short, konst::bs> row_prune(
        {
             //i = (i<0) ? 0 : i;
             const short r_1{grp(i, j)};
-            if (c[r_1] == 0)
+            if (c[r_1] <= 0)
             {
                 continue;
             }
@@ -262,7 +265,11 @@ std::array<unsigned short, konst::bs> row_prune(
             for (short j = 0; j < konst::sz; j++)
             {
                 const short r{grp(i, j)};
-                if (c[r] != candidate_pair && high_bit_count(c[r]) > 1)
+                if (c[r] <= 0)
+                {
+                    continue;
+                }
+                else if (c[r] != candidate_pair && high_bit_count(c[r]) > 1)
                 {
                     #ifdef DEBUG
                     std::cout << "row_set " << algae::to[r] << " from ";
@@ -281,8 +288,8 @@ std::array<unsigned short, konst::bs> row_prune(
     return c;
 }
 
-std::array<unsigned short, konst::bs> col_prune(
-    std::array<unsigned short, konst::bs> c)
+std::array<short, konst::bs> col_prune(
+    std::array<short, konst::bs> c)
 {
     short candidate_pair{0x0};
     for (short i = 0; i < konst::sz; i++)
@@ -290,7 +297,7 @@ std::array<unsigned short, konst::bs> col_prune(
         const short r{grp(0, i)};
         for (short j = r; j < r + konst::sb; j+=3)
         {
-            if (c[j] == 0x0)
+            if (c[j] <= 0)
             {
                 continue;
             }
@@ -306,7 +313,11 @@ std::array<unsigned short, konst::bs> col_prune(
         {
             for (short j = r; j < r + konst::sb; j+=3)
             {
-                if (c[j] != candidate_pair && high_bit_count(c[j]) > 1)
+                if (c[j] <= 0)
+                {
+                    continue;
+                }
+                else if (c[j] != candidate_pair && high_bit_count(c[j]) > 1)
                 {
                     #ifdef DEBUG
                     std::cout << "col_set " << algae::to[j] << " from ";
@@ -325,8 +336,8 @@ std::array<unsigned short, konst::bs> col_prune(
     return c;
 }
 
-std::array<unsigned short, konst::bs> prune(
-    std::array<unsigned short, konst::bs> c)
+std::array<short, konst::bs> prune(
+    std::array<short, konst::bs> c)
 {
     c = sqr_prune(c);
     c = row_prune(c);
@@ -334,15 +345,14 @@ std::array<unsigned short, konst::bs> prune(
     return c;
 }
 
-std::array<unsigned short, konst::bs> try_solo_find(
-    std::array<unsigned short, konst::bs> b,
-    std::array<unsigned short, konst::bs> c)
+std::array<short, konst::bs> try_solo_find(
+    std::array<short, konst::bs> b)
 {
-    short index = find_solo(b, c);
+    short index = find_solo(b);
     while (index != (-1))
     {
-        short value = equiv(c[index]);
-        b[index] = value;
+        short value = equiv(b[index]);
+        b[index] = -value;
         #ifdef DEBUG
         bool FAILURE{(b[index] == sref[index]) ? false : true};
         if (FAILURE)
@@ -351,29 +361,28 @@ std::array<unsigned short, konst::bs> try_solo_find(
         }
         std::cout << "sol_i_" << b[index] << "_at_" << algae::to[index] << '\n';
         #endif
-        c = set_can(b, c);
-        index = (value == 0) ? (-1) : find_solo(b, c);
+        b = set_can(b);
+        index = (value == 0) ? (-1) : find_solo(b);
     }
-
     return b;
 }
 
-std::array<unsigned short, konst::bs> try_row_find(
-    std::array<unsigned short, konst::bs> b,
-    std::array<unsigned short, konst::bs> c)
+std::array<short, konst::bs> try_row_find(
+    std::array<short, konst::bs> b)
 {
     if (!blank_check(b))
     {
         return b;
     }
-    std::array<short, 0x2> value = row_find(c);
+    std::array<short, 0x2> value = row_find(b);
     while (value[0] != 0x5)
     {
         for (short i = 0; i < konst::sz; i++)
         {
-            if ((value[0] & c[grp(value[1], i)]) != 0)
+            const short position{grp(value[1], i)};
+            if ((value[0] & b[position]) != 0 && b[position] > 0)
             {
-                b[grp(value[1], i)] = equiv(value[0]);
+                b[position] = -equiv(value[0]);
                 #ifdef DEBUG
                 bool FAILURE{(b[grp(value[1], i)] == sref[grp(value[1], i)]) ? false : true};
                 if (FAILURE)
@@ -385,28 +394,27 @@ std::array<unsigned short, konst::bs> try_row_find(
                 #endif
             }
         }
-        c = set_can(b, c);
-        value = row_find(c);
+        b = set_can(b);
+        value = row_find(b);
     }
     return b;
 }
 
-std::array<unsigned short, konst::bs> try_col_find(
-    std::array<unsigned short, konst::bs> b,
-    std::array<unsigned short, konst::bs> c)
+std::array<short, konst::bs> try_col_find(
+    std::array<short, konst::bs> b)
 {
     if (!blank_check(b))
     {
         return b;
     }
-    std::array<short, 0x2> value = col_find(c);
+    std::array<short, 0x2> value = col_find(b);
     while (value[0] != 0x5)
     {
         for (short i = value[1]; i < (value[1] + konst::sb); i+=3)
         {
-            if ((value[0] & c[i]) != 0)
+            if ((value[0] & b[i]) != 0 && b[i] > 0)
             {
-                b[i] = equiv(value[0]);
+                b[i] = -equiv(value[0]);
                 #ifdef DEBUG
                 bool FAILURE{(b[i] == sref[i]) ? false : true};
                 if (FAILURE)
@@ -416,29 +424,28 @@ std::array<unsigned short, konst::bs> try_col_find(
                 std::cout << "col_i_" << b[i] << "_at_" << algae::to[i] << '\n';
                 #endif
             }
-        c = set_can(b, c);
+        b = set_can(b);
         }
-        value = col_find(c);
+        value = col_find(b);
     }
     return b;
 }
 
-std::array<unsigned short, konst::bs> try_sqr_find(
-    std::array<unsigned short, konst::bs> b,
-    std::array<unsigned short, konst::bs> c)
+std::array<short, konst::bs> try_sqr_find(
+    std::array<short, konst::bs> b)
 {
     if (!blank_check(b))
     {
         return b;
     }
-    std::array<short, 0x2> value = sqr_find(c);
+    std::array<short, 0x2> value = sqr_find(b);
     while (value[0] != 0x5)
     {
         for (short i = value[1]; i < (value[1] + konst::sz); i++)
         {
-            if ((value[0] & c[i]) != 0)
+            if ((value[0] & b[i]) != 0 && b[i] > 0)
             {
-                b[i] = equiv(value[0]);
+                b[i] = -equiv(value[0]);
                 #ifdef DEBUG
                 bool FAILURE{(b[i] == sref[i]) ? false : true};
                 if (FAILURE)
@@ -449,15 +456,15 @@ std::array<unsigned short, konst::bs> try_sqr_find(
                 #endif
             }
         }
-        c = set_can(b, c);
-        value = sqr_find(c);
+        b = set_can(b);
+        value = sqr_find(b);
     }
     return b;
 }
 
 short diff_magn(
-    std::array<unsigned short, konst::bs> b_1,
-    std::array<unsigned short, konst::bs> b_2)
+    std::array<short, konst::bs> b_1,
+    std::array<short, konst::bs> b_2)
 {
     short diff_counter{0};
     for (short i = 0; i < konst::bs; i++)

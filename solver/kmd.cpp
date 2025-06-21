@@ -5,34 +5,50 @@
 #include <unordered_map>
 
 
+void draw_help_dialog();
 std::array<short, konst::sqr_sz> init_from_file(std::string filename);
 short board_export(
     std::array<short, konst::sqr_sz> board,
     std::string filename);
 short candidates(unsigned char locale, 
     std::array<short, konst::sqr_sz> board);
-void draw_board(std::array<short, konst::sqr_sz> b);
-void draw_cboard(std::array<short, konst::sqr_sz> c);
+void draw_board(std::array<short, konst::sqr_sz> board);
+void draw_cboard(std::array<short, konst::sqr_sz> board);
 void draw_candidates(short candidat);
-void draw_boardref(std::array<short, konst::sqr_sz> b);
+void draw_boardref(std::array<short, konst::sqr_sz> board);
 short equiv(short c);
 short find_solo(
-    std::array<short, konst::sqr_sz> b);
+    std::array<short, konst::sqr_sz> board);
 std::array<short, konst::sqr_sz> try_solo_find(
-    std::array<short, konst::sqr_sz> b);
+    std::array<short, konst::sqr_sz> board);
+std::array<short, konst::sqr_sz> try_col_find(
+    std::array<short, konst::sqr_sz> board);
 std::array<short, konst::sqr_sz> try_sqr_find(
-    std::array<short, konst::sqr_sz> b);
+    std::array<short, konst::sqr_sz> board);
 std::array<short, konst::sqr_sz> try_row_find(
-    std::array<short, konst::sqr_sz> b);
+    std::array<short, konst::sqr_sz> board);
 std::array<short, konst::sqr_sz> solve_board(
-    std::array<short, konst::sqr_sz> b);
+    std::array<short, konst::sqr_sz> board);
 short set_xor_search(
-    std::array<short, konst::sqr_sz> b,
+    std::array<short, konst::sqr_sz> board,
     short start,
     char type);
 std::array<short, konst::sqr_sz> board_import(
     std::string filename);
 
+bool input_in_range(
+    std::string input)
+{
+    for (short i = '1'; i <= '1' + konst::sz; i++)
+    {
+        std::string val{(char)i};
+        if (input.compare(val))
+        {
+            return true;
+        }
+    }
+    return false;
+}
 
 std::array<short, konst::sqr_sz> kommand(
     std::string input, 
@@ -51,6 +67,7 @@ std::array<short, konst::sqr_sz> kommand(
     else if (input.compare(komm::usr_help) == 0)
     {
         // print help message
+        draw_help_dialog();
         return board;
     }
     else if (input.compare(komm::usr_insr) == 0)
@@ -61,11 +78,18 @@ std::array<short, konst::sqr_sz> kommand(
         std::string inputstr{};
         std::cout << "Location: ";
         std::cin >> inputstr;
-        short loc = alg_map::u.at(inputstr);
+        const short loc = alg_map::u.at(inputstr);
         std::cout << "Value: ";
         std::cin >> inputstr;
-        short val = std::stoi(inputstr);
-        board[loc] = val;
+        if (input_in_range(inputstr))
+        {
+            const short val = std::stoi(inputstr);
+            board[loc] = val;
+        }
+        else
+        {
+            std::cout << "input invalid\n";
+        }
         return board;
     }
     else if (input.compare(komm::usr_next) == 0)
@@ -112,10 +136,17 @@ std::array<short, konst::sqr_sz> kommand(
         std::string inputstr{};
         std::cout << "Search at index...";
         std::cin >> inputstr;
-        short searchfor = alg_map::u.at(inputstr);
-        std::cout << pseud::mv_up << pseud::clr;
-        std::cout << "Candidates @ " << inputstr << ": ";
-        draw_candidates(board[searchfor]);
+        if (input_in_range(inputstr))
+        {
+            short searchfor = alg_map::u.at(inputstr);
+            std::cout << pseud::mv_up << pseud::clr;
+            std::cout << "Candidates @ " << inputstr << ": ";
+            draw_candidates(board[searchfor]);
+        }
+        else
+        {
+            std::cout << "input invalid\n";
+        }
         return board;
     }
     else if (input.compare(komm::usr_solo) == 0)
@@ -132,8 +163,19 @@ std::array<short, konst::sqr_sz> kommand(
         std::string inputstr{};
         std::cout << "Search Column...";
         std::cin >> inputstr;
-        short searchfor = std::stoi(inputstr);
-        draw_candidates(set_xor_search(board, searchfor, 'c'));
+        if (inputstr.compare(komm::usr_fin) == 0)
+        {
+            return try_col_find(board);
+        }
+        else if (input_in_range(inputstr))
+        {
+            short searchfor = std::stoi(inputstr);
+            draw_candidates(set_xor_search(board, searchfor, 'c'));
+        }
+        else
+        {
+            std::cout << "input invalid\n";
+        }
     }
     else if (input.compare(komm::usr_row) == 0)
     {
@@ -144,10 +186,14 @@ std::array<short, konst::sqr_sz> kommand(
         {
             return try_row_find(board);
         }
-        else
+        else if (input_in_range(inputstr))
         {
             short searchfor = std::stoi(inputstr);
             draw_candidates(set_xor_search(board, searchfor, 'r'));
+        }
+        else
+        {
+            std::cout << "input invalid\n";
         }
     }
     else if (input.compare(komm::usr_sqr) == 0)
@@ -159,10 +205,14 @@ std::array<short, konst::sqr_sz> kommand(
         {
             return try_sqr_find(board);
         }
-        else
+        else if (input_in_range(inputstr))
         {
             short searchfor = std::stoi(inputstr);
             draw_candidates(set_xor_search(board, searchfor, 's'));
+        }
+        else
+        {
+            std::cout << "input invalid\n";
         }
     }
     else if (input.compare(komm::usr_open) == 0)

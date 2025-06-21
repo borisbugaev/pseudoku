@@ -18,6 +18,27 @@ reference board:
 24 25 26 | 51 52 53 | 78 79 80
 */
 
+void draw_help_dialog()
+{
+    std::cout << "COMMANDS:\n"
+    << '>' << komm::usr_draw <<'\n'
+    << "draw the current board\n"
+    << '>' << komm::usr_ref << '\n'
+    << "draw board with algebraic notation for reference\n"
+    << '>' << komm::usr_srch << '\n'
+    << "search for candidates at given index\n"
+    << '>' << komm::usr_bimp << '\n'
+    << "import a board from a file\n"
+    << '>' << komm::usr_insr << '\n'
+    << "insert a value at a given index\n"
+    << '>' << komm::usr_fin << '\n'
+    << "solve current board\n"
+    << '>' << komm::usr_next << '\n'
+    << "solve next value\n"
+    << '>' << komm::usr_exit << '\n'
+    << "exit\n";
+}
+
 std::string value_str(
     short value)
 {
@@ -38,27 +59,27 @@ std::string value_str(
 single line of board
 */
 std::string board_line(
-    std::array<short, konst::sqr_sz> b,
-    unsigned short f, 
+    std::array<short, konst::sqr_sz> board,
+    unsigned short index, 
     char flag)
 {
-    std::string my_line{value_str(b[f]) 
+    std::string my_line{value_str(board[index]) 
         + ' '
-        + value_str(b[f + 1])
+        + value_str(board[index + 1])
         + ' '
-        + value_str(b[f + 2])
+        + value_str(board[index + 2])
         + ' ' + '|' + ' '
-        + value_str(b[f + konst::th_sz])
+        + value_str(board[index + konst::th_sz])
         + ' '
-        + value_str(b[f + konst::th_sz + 1])
+        + value_str(board[index + konst::th_sz + 1])
         + ' '
-        + value_str(b[f + konst::th_sz + 2])
+        + value_str(board[index + konst::th_sz + 2])
         + ' ' + '|' + ' '
-        + value_str(b[f + konst::th_sz * 2])
+        + value_str(board[index + konst::th_sz * 2])
         + ' '
-        + value_str(b[f + konst::th_sz * 2 + 1])
+        + value_str(board[index + konst::th_sz * 2 + 1])
         + ' '
-        + value_str(b[f + konst::th_sz * 2 + 2])
+        + value_str(board[index + konst::th_sz * 2 + 2])
     };
     switch (flag)
     {
@@ -69,7 +90,7 @@ std::string board_line(
         }
         case 'a':
         {
-            const char i_c{(char)(f/3 + 'a')};
+            const char i_c{(char)(index/3 + 'a')};
             my_line.insert(0, 1, '|');
             my_line.insert(0, 1, i_c);
             my_line.append(1, '|');
@@ -136,7 +157,7 @@ void draw_candidates(short candidat)
 /*
 draw board as it should appear
 */
-void draw_board(std::array<short, konst::sqr_sz> b)
+void draw_board(std::array<short, konst::sqr_sz> board)
 {
     for (unsigned short f = 0; f < konst::th_sz; f += konst::rt_sz)
     {
@@ -144,11 +165,11 @@ void draw_board(std::array<short, konst::sqr_sz> b)
         {
             std::cout << pseud::sqr_x_brdr << '\n';
         }
-        std::cout << board_line(b, f, 'n');
+        std::cout << board_line(board, f, 'n');
     }
 }
 
-void draw_cboard(std::array<short, konst::sqr_sz> b)
+void draw_cboard(std::array<short, konst::sqr_sz> board)
 {
     for (unsigned short f = 0; f < konst::th_sz; f += konst::rt_sz)
     {
@@ -156,26 +177,26 @@ void draw_cboard(std::array<short, konst::sqr_sz> b)
         {
             std::cout << pseud::sqr_x_brdr << '\n';
         }
-        std::cout << board_line(b, f, 'n');
+        std::cout << board_line(board, f, 'n');
     }
 }
 
 /*
 draw algebraic notation reference next to the board
 */
-void draw_boardref(std::array<short, konst::sqr_sz> b)
+void draw_boardref(std::array<short, konst::sqr_sz> board)
 {
     std::cout << "  9 8 7   6 5 4   3 2 1\n";
-    std::cout << board_line(b, 0, 'a');
-    std::cout << board_line(b, 3, 'a');
-    std::cout << board_line(b, 6, 'a');
+    std::cout << board_line(board, 0, 'a');
+    std::cout << board_line(board, 3, 'a');
+    std::cout << board_line(board, 6, 'a');
     std::cout << "  " << pseud::sqr_x_brdr << '\n';
-    std::cout << board_line(b, 9, 'a');
-    std::cout << board_line(b, 12, 'a');
-    std::cout << board_line(b, 15, 'a');
+    std::cout << board_line(board, 9, 'a');
+    std::cout << board_line(board, 12, 'a');
+    std::cout << board_line(board, 15, 'a');
     std::cout << "  " << pseud::sqr_x_brdr << '\n';
-    std::cout << board_line(b, 18, 'a');
-    std::cout << board_line(b, 21, 'a');
-    std::cout << board_line(b, 24, 'a');
+    std::cout << board_line(board, 18, 'a');
+    std::cout << board_line(board, 21, 'a');
+    std::cout << board_line(board, 24, 'a');
     std::cout << "  9 8 7   6 5 4   3 2 1\n";
 }

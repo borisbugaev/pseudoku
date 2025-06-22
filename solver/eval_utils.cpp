@@ -10,6 +10,7 @@ functions to be used in sudoku evaluation
 TODO: square set eval, set striking
 */
 
+constexpr unsigned char my_square(unsigned char locale);
 void draw_candidates(short candidat);
 std::array<short, konst::sqr_sz> set_can(
     std::array<short, konst::sqr_sz> board);
@@ -185,6 +186,142 @@ std::array<short, 0x2> col_find(
         col_set = 0x0;
     }
     return {0x5, 0x5};
+}
+
+std::array<short, konst::sqr_sz> cull_square_from_row(
+    std::array<short, konst::sqr_sz> board,
+    short square_number,
+    short value_to_cull,
+    short subscript_to_preserve)
+{
+    // this is certainly incorrect. I will figure out why later.
+    short start{static_cast<short>((subscript_to_preserve == sqr_sub_id::row_a) ? sqr_sub_id::row_a : 0)};
+    short end{static_cast<short>((subscript_to_preserve == sqr_sub_id::row_c) ? sqr_sub_id::row_a : 0)};
+    for (short i = square_number + start; i < square_number + konst::rt_sz - end; i++)
+    {
+        if (subscript_to_preserve == sqr_sub_id::row_b 
+            && i == (square_number + start + sqr_sub_id::row_b))
+        {
+            i += konst::rt_sz;
+            continue;
+        }
+        if (board[i] > 0)
+        {
+            board[i] &= ~value_to_cull;
+        }
+    }
+    return board;
+}
+
+const short col_intersec(
+    short subscript)
+{
+    short intersec{0x0};
+    const short start{grp(0, subscript)};
+    for (short i = start; i < start + konst::th_sz; i += konst::rt_sz)
+    {
+        intersec |= 1 << my_square(i);
+    }
+    return intersec;
+}
+
+const short row_intersec(
+    short subscript)
+{
+    short intersec{0x0};
+    for (short i = 0; i < konst::sz; i++)
+    {
+        const short my_loc{grp(subscript, i)};
+        intersec |= 1 << my_square(my_loc);
+    }
+    return intersec;
+}
+
+short square_subset_get(
+    std::array<short, konst::sqr_sz> board,
+    short square_number,
+    short subset_id)
+{
+    short square_set{0x0};
+    const short squid{static_cast<short>(square_number * konst::sz)};
+    if (subset_id < sqr_sub_id::row_a)
+    {
+        for (short i = squid + subset_id; i < konst::sz + squid + subset_id; i += konst::rt_sz)
+        {
+            square_set |= (board[i] > 0) ? board[i] : 0;
+        }
+    }
+    else
+    {
+        const short a_subset_id{static_cast<short>((subset_id - konst::rt_sz) * konst::rt_sz)};
+        for (short i = squid + a_subset_id; i < squid + a_subset_id + konst::rt_sz; i++)
+        {
+            square_set |= (board[i] > 0) ? board[i] : 0;
+        }
+    }
+    return square_set;
+}
+
+// un tested
+std::array<short, konst::sqr_sz> prune_squares_by_rows(
+    std::array<short, konst::sqr_sz> board)
+{
+    std::array<short, konst::rt_sz> sq_rw{}, int_sq{};
+    for (short i = 0; i < konst::th_sz; i+=konst::rt_sz)
+    {
+        const short intersects_squares{row_intersec(i)};
+        short temp_isec{intersects_squares};
+        const short hbc{high_bit_count(intersects_squares)};
+        if (hbc != konst::rt_sz)
+        {
+            break;
+        }
+        const short subrow{static_cast<short>((i % konst::sz) / konst::rt_sz + sqr_sub_id::row_a)};
+        short superset{0x0}, xorset{0x0};
+        for (short j = 0; j < konst::rt_sz; j++)
+        {
+            int_sq[j] = equiv(get_1st_mapped_short(temp_isec));
+            sq_rw[j] = square_subset_get(board, int_sq[j], subrow);
+            temp_isec &= ~get_1st_mapped_short(temp_isec);
+        }
+        for (short j = 0; j < konst::rt_sz; j++)
+        {
+            superset |= xorset & sq_rw[j];
+            xorset ^= sq_rw[j];
+        }
+        xorset &= ~superset;
+        if (xorset == 0)
+        {
+            continue;
+        }
+        const short xs{high_bit_count(xorset)};
+        short temp_xset{xorset};
+        short x_sqr_id{0x0};
+        for (short xj = 0; xj < xs; xj++)
+        {
+            short xset_next{get_1st_mapped_short(temp_xset)};
+            for (short j = 0; j < konst::rt_sz; j++)
+            {
+                x_sqr_id |= (xset_next & sq_rw[j]) ? (1 << j) : 0;
+            }
+            temp_xset &= ~xset_next;
+        }
+        const short x_hbc{high_bit_count(x_sqr_id)};
+        temp_xset = xorset;
+        for (short j = 0; j < x_hbc; j++)
+        {
+            short square_to_cull = equiv(get_1st_mapped_short(x_sqr_id));
+            short square_number{int_sq[square_to_cull]};
+            short value{get_1st_mapped_short(temp_xset)};
+            board = cull_square_from_row(board, square_number, value,subrow);
+            temp_xset &= ~value;
+            x_sqr_id &= ~square_to_cull;
+        }
+        // get square subsets for given row
+        // comparison....
+        // something?
+    }
+    return board;
 }
 
 std::array<short, konst::sqr_sz> sqr_prune(

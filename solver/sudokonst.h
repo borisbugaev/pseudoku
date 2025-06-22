@@ -50,6 +50,16 @@ namespace komm
     const std::string usr_cdrw{"cdraw"};
 }
 
+namespace sqr_sub_id
+{
+    constexpr short col_3{0};
+    constexpr short col_2{1};
+    constexpr short col_1{2};
+    constexpr short row_a{3};
+    constexpr short row_b{4};
+    constexpr short row_c{5};
+}
+
 namespace algae
 {
     const std::array<std::string, konst::sqr_sz> to{

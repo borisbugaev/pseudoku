@@ -55,6 +55,69 @@ std::string value_str(
     return my_value;
 }
 
+std::string can_value_str(
+    short value)
+{
+    std::string my_value{};
+    short my_s_value = value < 0 ? 0 : value;
+    if (my_s_value)
+    {
+        my_value = std::to_string(my_s_value);
+    }
+    else
+    {
+        my_value = "-";
+    }
+    return my_value;
+}
+
+std::string can_board_ln(
+    std::array<short, konst::sqr_sz> board,
+    unsigned short index, 
+    char flag)
+{
+    std::string my_line{can_value_str(board[index]) 
+        + ' '
+        + can_value_str(board[index + 1])
+        + ' '
+        + can_value_str(board[index + 2])
+        + ' ' + '|' + ' '
+        + can_value_str(board[index + konst::th_sz])
+        + ' '
+        + can_value_str(board[index + konst::th_sz + 1])
+        + ' '
+        + can_value_str(board[index + konst::th_sz + 2])
+        + ' ' + '|' + ' '
+        + can_value_str(board[index + konst::th_sz * 2])
+        + ' '
+        + can_value_str(board[index + konst::th_sz * 2 + 1])
+        + ' '
+        + can_value_str(board[index + konst::th_sz * 2 + 2])
+    };
+    switch (flag)
+    {
+        case 'n':
+        {
+            my_line.append(1, '\n');
+            break;
+        }
+        case 'a':
+        {
+            const char i_c{(char)(index/3 + 'a')};
+            my_line.insert(0, 1, '|');
+            my_line.insert(0, 1, i_c);
+            my_line.append(1, '|');
+            my_line.append(1, i_c);
+            my_line.append(1, '\n');
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+    return my_line;
+}
 /*
 single line of board
 */
@@ -177,7 +240,7 @@ void draw_cboard(std::array<short, konst::sqr_sz> board)
         {
             std::cout << pseud::sqr_x_brdr << '\n';
         }
-        std::cout << board_line(board, f, 'n');
+        std::cout << can_board_ln(board, f, 'n');
     }
 }
 
@@ -199,4 +262,21 @@ void draw_boardref(std::array<short, konst::sqr_sz> board)
     std::cout << board_line(board, 21, 'a');
     std::cout << board_line(board, 24, 'a');
     std::cout << "  9 8 7   6 5 4   3 2 1\n";
+}
+
+void draw_differences(
+    std::array<short, konst::sqr_sz> board_1,
+    std::array<short, konst::sqr_sz> board_2)
+{
+    for (short i = 0; i < konst::sqr_sz; i++)
+    {
+        if (board_1[i] != board_2[i])
+        {
+            std::cout << "board 1 at " << algae::to[i] << ' ';
+            draw_candidates(board_1[i]);
+            std::cout << "board 2: ";
+            draw_candidates(board_2[i]);
+            std::cout << '\n';
+        }
+    }
 }

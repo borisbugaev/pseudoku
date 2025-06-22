@@ -17,6 +17,38 @@ std::string board_line(
     char flag);
 std::array<short, konst::sqr_sz> prune(
     std::array<short, konst::sqr_sz> c);
+
+
+std::array<short, konst::sqr_sz> initialize_candidates(
+    std::array<short, konst::sqr_sz> board)
+{
+    for (short i = 0; i < konst::sqr_sz; i++)
+    {
+        if (board[i] == 0)
+        {
+            board[i] = 0x1ff;
+        }
+    }
+    return board;
+}
+
+/*
+generate candidate board
+*/
+std::array<short, konst::sqr_sz> set_can(
+    std::array<short, konst::sqr_sz> board)
+{
+    for (short i = 0; i < konst::sqr_sz; i++)
+    {
+        if (board[i] >= 0)
+        {
+            board[i] = candidates(i, board);
+        }
+    }
+    board = prune(board);
+    return board;
+}
+
 /*
 init board from file
 */
@@ -35,6 +67,8 @@ std::array<short, konst::sqr_sz> init_from_file(std::string filename)
         }
     }
     file.close();
+    board = initialize_candidates(board);
+    board = set_can(board);
     return board;
 }
 
@@ -54,6 +88,8 @@ std::array<short, konst::sqr_sz> board_import(
         }
     }
     file.close();
+    board = initialize_candidates(board);
+    board = set_can(board);
     return board;
 }
 
@@ -70,34 +106,6 @@ std::array<short, konst::sqr_sz> init_blank()
     return board;
 }
 
-std::array<short, konst::sqr_sz> initialize_candidates(
-    std::array<short, konst::sqr_sz> board)
-{
-    for (short i = 0; i < konst::sqr_sz; i++)
-    {
-        if (board[i] == 0)
-        {
-            board[i] = 0x1ff;
-        }
-    }
-    return board;
-}
-/*
-generate candidate board
-*/
-std::array<short, konst::sqr_sz> set_can(
-    std::array<short, konst::sqr_sz> board)
-{
-    for (short i = 0; i < konst::sqr_sz; i++)
-    {
-        if (board[i] >= 0)
-        {
-            board[i] = candidates(i, board);
-        }
-    }
-    board = prune(board);
-    return board;
-}
 
 short board_export(
     std::array<short, konst::sqr_sz> board,

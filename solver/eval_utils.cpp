@@ -205,7 +205,7 @@ std::array<short, konst::sqr_sz> cull_square_from_row(
             i += konst::rt_sz;
             continue;
         }
-        if (board[i] > 0)
+        if (board[i] > 0 && board[i] & value_to_cull)
         {
             board[i] &= ~value_to_cull;
         }
@@ -280,7 +280,7 @@ std::array<short, konst::sqr_sz> prune_squares_by_rows(
         short superset{0x0}, xorset{0x0};
         for (short j = 0; j < konst::rt_sz; j++)
         {
-            int_sq[j] = equiv(get_1st_mapped_short(temp_isec));
+            int_sq[j] = equiv(get_1st_mapped_short(temp_isec)) - 1;
             sq_rw[j] = square_subset_get(board, int_sq[j], subrow);
             temp_isec &= ~get_1st_mapped_short(temp_isec);
         }
@@ -310,7 +310,7 @@ std::array<short, konst::sqr_sz> prune_squares_by_rows(
         temp_xset = xorset;
         for (short j = 0; j < x_hbc; j++)
         {
-            short square_to_cull = equiv(get_1st_mapped_short(x_sqr_id));
+            short square_to_cull = equiv(get_1st_mapped_short(x_sqr_id)) - 1;
             short square_number{int_sq[square_to_cull]};
             short value{get_1st_mapped_short(temp_xset)};
             board = cull_square_from_row(board, square_number, value,subrow);
@@ -609,4 +609,15 @@ short diff_magn(
         diff_counter += (board_1[i] == board_2[i]) ? 0 : 1;
     }
     return diff_counter;
+}
+
+std::array<short, konst::sqr_sz> diff_at(
+    std::array<short, konst::sqr_sz> board_1,
+    std::array<short, konst::sqr_sz> board_2)
+{
+    for (short i = 0; i < konst::sqr_sz; i++)
+    {
+        board_1[i] = board_1[i] == board_2[i] ? 0 : 1;
+    }
+    return board_1;
 }

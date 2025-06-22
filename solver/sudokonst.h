@@ -48,6 +48,7 @@ namespace komm
     const std::string usr_row{"row"};
     const std::string usr_sqr{"square"};
     const std::string usr_cdrw{"cdraw"};
+    const std::string usr_try{"debug"};
 }
 
 namespace sqr_sub_id

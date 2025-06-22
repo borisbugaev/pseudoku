@@ -5,6 +5,11 @@
 #include <unordered_map>
 
 
+void draw_differences(
+    std::array<short, konst::sqr_sz> board_1,
+    std::array<short, konst::sqr_sz> board_2);
+std::array<short, konst::sqr_sz> prune_squares_by_rows(
+    std::array<short, konst::sqr_sz> board);
 void draw_help_dialog();
 std::array<short, konst::sqr_sz> init_from_file(std::string filename);
 short board_export(
@@ -149,11 +154,6 @@ std::array<short, konst::sqr_sz> kommand(
         }
         return board;
     }
-    else if (input.compare(komm::usr_solo) == 0)
-    {
-        board = try_solo_find(board);
-        return board;
-    }
     else if (input.compare(komm::usr_draw) == 0)
     {
         draw_board(board);
@@ -244,6 +244,59 @@ std::array<short, konst::sqr_sz> kommand(
         {
             std::cout << "Successfully imported board at " << inputstr << '\n';
             board = iboard;
+        }
+    }
+    else if (input.compare("debug") == 0)
+    {
+        char inputchar{};
+        std::cout << "...";
+        std::cin >> inputchar;
+        std::array<short, konst::sqr_sz> trialboard;
+        bool am_debug{true};
+        while (am_debug)
+        {
+            switch (inputchar)
+            {
+                case 'r': // generate trialboard based on row pruning
+                {
+                    trialboard = prune_squares_by_rows(board);
+                    break;
+                }
+                case 'd': // draw differences between board and trialboard
+                {
+                    draw_differences(board, trialboard);
+                    break;
+                }
+                case 't': // draw trialboard
+                {
+                    draw_board(trialboard);
+                    break;
+                }
+                case 'e': // end
+                {
+                    am_debug = false;
+                    return board;
+                    break;
+                }
+                case 'q': // difference
+                {
+                    bool equality{board == trialboard};
+                    std::cout << equality;
+                    break;
+                }
+                case 's': // set trial to board
+                {
+                    board = trialboard;
+                    break;
+                }
+            }
+            std::cout << "\n...";
+            std::cin >> inputchar;
+            if (inputchar == 'e')
+            {
+                am_debug = false;
+                break;
+            }
         }
     }
     else

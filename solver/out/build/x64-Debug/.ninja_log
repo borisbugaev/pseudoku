@@ -1,0 +1,9 @@
+# ninja log v6
+16	1191	7722699327727487	CMakeFiles/pdk.dir/bparse.cpp.obj	39bd771cf6cd022c
+23	1198	7722699327727487	CMakeFiles/pdk.dir/eval_utils.cpp.obj	d1d231fc6883e1df
+27	1318	7722699327858399	CMakeFiles/pdk.dir/solver_caller.cpp.obj	cbe43a021cefc7bd
+4	1324	7722699327627283	CMakeFiles/pdk.dir/main.cpp.obj	a30d6abefd13a52f
+9	1329	7722699327627283	CMakeFiles/pdk.dir/kmd.cpp.obj	c1f462230cfd1efa
+20	1334	7722699327727487	CMakeFiles/pdk.dir/draw.cpp.obj	ee8f6df5ae2f4f9d
+13	1338	7722699327712433	CMakeFiles/pdk.dir/binit.cpp.obj	a66e4a34006d5e8d
+1338	1599	7722699340950560	pdk.exe	f324ecf4d015a34

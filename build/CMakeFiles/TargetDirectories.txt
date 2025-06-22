@@ -1,0 +1,3 @@
+C:/Users/wrlar/Documents/g/pseudoku/build/CMakeFiles/pdk.dir
+C:/Users/wrlar/Documents/g/pseudoku/build/CMakeFiles/edit_cache.dir
+C:/Users/wrlar/Documents/g/pseudoku/build/CMakeFiles/rebuild_cache.dir

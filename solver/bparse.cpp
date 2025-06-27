@@ -91,7 +91,7 @@ short set_parse_row(std::array<short, konst::sqr_sz> board,
         row_start + konst::th_sz * 2,
         row_start + konst::th_sz * 2 + 1,
         row_start + konst::th_sz * 2 + 2};
-    for (short i = 0; i < konst::sz; i++)
+    for (short i = 0; i < konst::sz; ++i)
     {
         short board_item{static_cast<short>(board[row_indices[i]] < 0 ? std::abs(board[row_indices[i]]) : 0)};
         set_row |= (1 << (board_item - 1));
@@ -125,7 +125,7 @@ short set_parse_sqr(std::array<short, konst::sqr_sz> board,
     short set_sqr{0x0};
     long start_sqr{sqr * konst::sz};
     long end_sqr{start_sqr + konst::sz};
-    for (long i = start_sqr; i < end_sqr; i++)
+    for (long i = start_sqr; i < end_sqr; ++i)
     {
         short board_item{static_cast<short>(board[i] < 0 ? std::abs(board[i]) : 0)};
         set_sqr |= (1 << (board_item - 1));

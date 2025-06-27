@@ -50,7 +50,7 @@ constexpr short equiv(short c)
 bool blank_check(
     std::array<short, konst::sqr_sz> board)
 {
-    for (short i = 0; i < konst::sqr_sz; i++)
+    for (short i = 0; i < konst::sqr_sz; ++i)
     {
         if (board[i] <= 0)
         {
@@ -65,7 +65,7 @@ bool high_bit_count(
     short quant)
 {
     short counter{0x0};
-    for (short i = 0x0; i < 0x10; i++)
+    for (short i = 0x0; i < 0x10; ++i)
     {
         counter += 0x1 & (bit_map >> i);
         if (counter > quant)
@@ -82,7 +82,7 @@ short high_bit_count(
     short bit_map)
 {
     short counter{0x0};
-    for (short i = 0x0; i < 0x10; i++)
+    for (short i = 0x0; i < 0x10; ++i)
     {
         counter += 0x1 & (bit_map >> i);
     }
@@ -109,7 +109,7 @@ if none, returns -1
 short find_solo(
     std::array<short, konst::sqr_sz> board)
 {
-    for (short i = 0; i < konst::sqr_sz; i++)
+    for (short i = 0; i < konst::sqr_sz; ++i)
     {
         if ((board[i] & (board[i] - 1)) == 0 && board[i] > 0)
         {
@@ -175,7 +175,7 @@ std::array<short, 0x2> col_find(
     std::array<short, konst::sqr_sz> board)
 {
     short col_set{0x0}, j{};
-    for (short i = 0; i < konst::sz; i++)
+    for (short i = 0; i < konst::sz; ++i)
     {
         j = grp(0, i);
         col_set = set_xor_search(board, j, 'c');
@@ -197,7 +197,7 @@ std::array<short, konst::sqr_sz> cull_square_from_row(
     // this is certainly incorrect. I will figure out why later.
     short start{static_cast<short>((subscript_to_preserve == sqr_sub_id::row_a) ? sqr_sub_id::row_a : 0)};
     short end{static_cast<short>((subscript_to_preserve == sqr_sub_id::row_c) ? sqr_sub_id::row_a : 0)};
-    for (short i = square_number + start; i < square_number + konst::rt_sz - end; i++)
+    for (short i = square_number + start; i < square_number + konst::rt_sz - end; ++i)
     {
         if (subscript_to_preserve == sqr_sub_id::row_b 
             && i == (square_number + start + sqr_sub_id::row_b))
@@ -229,7 +229,7 @@ const short row_intersec(
     short subscript)
 {
     short intersec{0x0};
-    for (short i = 0; i < konst::sz; i++)
+    for (short i = 0; i < konst::sz; ++i)
     {
         const short my_loc{grp(subscript, i)};
         intersec |= 1 << my_square(my_loc);
@@ -254,7 +254,7 @@ short square_subset_get(
     else
     {
         const short a_subset_id{static_cast<short>((subset_id - konst::rt_sz) * konst::rt_sz)};
-        for (short i = squid + a_subset_id; i < squid + a_subset_id + konst::rt_sz; i++)
+        for (short i = squid + a_subset_id; i < squid + a_subset_id + konst::rt_sz; ++i)
         {
             square_set |= (board[i] > 0) ? board[i] : 0;
         }
@@ -278,13 +278,13 @@ std::array<short, konst::sqr_sz> prune_squares_by_rows(
         }
         const short subrow{static_cast<short>((i % konst::sz) / konst::rt_sz + sqr_sub_id::row_a)};
         short superset{0x0}, xorset{0x0};
-        for (short j = 0; j < konst::rt_sz; j++)
+        for (short j = 0; j < konst::rt_sz; ++j)
         {
             int_sq[j] = equiv(get_1st_mapped_short(temp_isec)) - 1;
             sq_rw[j] = square_subset_get(board, int_sq[j], subrow);
             temp_isec &= ~get_1st_mapped_short(temp_isec);
         }
-        for (short j = 0; j < konst::rt_sz; j++)
+        for (short j = 0; j < konst::rt_sz; ++j)
         {
             superset |= xorset & sq_rw[j];
             xorset ^= sq_rw[j];
@@ -297,10 +297,10 @@ std::array<short, konst::sqr_sz> prune_squares_by_rows(
         const short xs{high_bit_count(xorset)};
         short temp_xset{xorset};
         short x_sqr_id{0x0};
-        for (short xj = 0; xj < xs; xj++)
+        for (short xj = 0; xj < xs; ++xj)
         {
             short xset_next{get_1st_mapped_short(temp_xset)};
-            for (short j = 0; j < konst::rt_sz; j++)
+            for (short j = 0; j < konst::rt_sz; ++j)
             {
                 x_sqr_id |= (xset_next & sq_rw[j]) ? (1 << j) : 0;
             }
@@ -308,7 +308,7 @@ std::array<short, konst::sqr_sz> prune_squares_by_rows(
         }
         const short x_hbc{high_bit_count(x_sqr_id)};
         temp_xset = xorset;
-        for (short j = 0; j < x_hbc; j++)
+        for (short j = 0; j < x_hbc; ++j)
         {
             short square_to_cull = equiv(get_1st_mapped_short(x_sqr_id)) - 1;
             short square_number{int_sq[square_to_cull]};
@@ -330,7 +330,7 @@ std::array<short, konst::sqr_sz> sqr_prune(
     short candidate_pair{0x0};
     for (short i = 0; i < konst::sqr_sz; i += konst::sz)
     {
-        for (short j = 0; j < konst::sz; j++)
+        for (short j = 0; j < konst::sz; ++j)
         {
             if (board[i+j] <= 0)
             {
@@ -338,7 +338,7 @@ std::array<short, konst::sqr_sz> sqr_prune(
             }
             else if (high_bit_count(board[i+j], 2))
             {
-                for (short k = j + 1; k < konst::sz - j; k++)
+                for (short k = j + 1; k < konst::sz - j; ++k)
                 {
                     candidate_pair = board[i+j] == board[i+k] ? board[i+j] : candidate_pair;
                 }
@@ -346,7 +346,7 @@ std::array<short, konst::sqr_sz> sqr_prune(
         }
         if (high_bit_count(candidate_pair, 2))
         {
-            for (short j = 0; j < konst::sz; j++)
+            for (short j = 0; j < konst::sz; ++j)
             {
                 if (board[i+j] <= 0)
                 {
@@ -380,7 +380,7 @@ std::array<short, konst::sqr_sz> row_prune(
     short candidate_pair{0x0};
     for (short i = 0; i < konst::th_sz; i += konst::rt_sz)
     {
-       for (short j = 0; j < konst::sz; j++)
+       for (short j = 0; j < konst::sz; ++j)
        {
             //i = (i<0) ? 0 : i;
             const short r_1{grp(i, j)};
@@ -390,7 +390,7 @@ std::array<short, konst::sqr_sz> row_prune(
             }
             else if (high_bit_count(board[r_1], 2))
             {
-                for (short k = j + 1; k < konst::sz - j; k++)
+                for (short k = j + 1; k < konst::sz - j; ++k)
                 {
                     const short r_2{grp(i, k)};
                     candidate_pair = board[r_1] == board[r_2] ? board[r_1] : candidate_pair;
@@ -399,7 +399,7 @@ std::array<short, konst::sqr_sz> row_prune(
        }
         if (high_bit_count(candidate_pair, 2))
         {
-            for (short j = 0; j < konst::sz; j++)
+            for (short j = 0; j < konst::sz; ++j)
             {
                 const short r{grp(i, j)};
                 if (board[r] <= 0)
@@ -514,7 +514,7 @@ std::array<short, konst::sqr_sz> try_row_find(
     std::array<short, 0x2> value = row_find(board);
     while (value[0] != 0x5)
     {
-        for (short i = 0; i < konst::sz; i++)
+        for (short i = 0; i < konst::sz; ++i)
         {
             const short position{grp(value[1], i)};
             if ((value[0] & board[position]) != 0 && board[position] > 0)
@@ -578,7 +578,7 @@ std::array<short, konst::sqr_sz> try_sqr_find(
     std::array<short, 0x2> value = sqr_find(board);
     while (value[0] != 0x5)
     {
-        for (short i = value[1]; i < (value[1] + konst::sz); i++)
+        for (short i = value[1]; i < (value[1] + konst::sz); ++i)
         {
             if ((value[0] & board[i]) != 0 && board[i] > 0)
             {
@@ -604,7 +604,7 @@ short diff_magn(
     std::array<short, konst::sqr_sz> board_2)
 {
     short diff_counter{0};
-    for (short i = 0; i < konst::sqr_sz; i++)
+    for (short i = 0; i < konst::sqr_sz; ++i)
     {
         diff_counter += (board_1[i] == board_2[i]) ? 0 : 1;
     }
@@ -615,7 +615,7 @@ std::array<short, konst::sqr_sz> diff_at(
     std::array<short, konst::sqr_sz> board_1,
     std::array<short, konst::sqr_sz> board_2)
 {
-    for (short i = 0; i < konst::sqr_sz; i++)
+    for (short i = 0; i < konst::sqr_sz; ++i)
     {
         board_1[i] = board_1[i] == board_2[i] ? 0 : 1;
     }

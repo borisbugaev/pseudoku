@@ -30,7 +30,7 @@ int main(int argc, char** argv)
     input_arg[0] = argv[0];
     if (argc == EXP_ARGC)
     {
-        for (int i = 1; i < EXP_ARGC; i++)
+        for (int i = 1; i < EXP_ARGC; ++i)
         {
             input_arg[i] = argv[1];
         }

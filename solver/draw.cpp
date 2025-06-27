@@ -268,7 +268,7 @@ void draw_differences(
     std::array<short, konst::sqr_sz> board_1,
     std::array<short, konst::sqr_sz> board_2)
 {
-    for (short i = 0; i < konst::sqr_sz; i++)
+    for (short i = 0; i < konst::sqr_sz; ++i)
     {
         if (board_1[i] != board_2[i])
         {

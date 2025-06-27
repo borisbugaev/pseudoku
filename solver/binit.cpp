@@ -22,7 +22,7 @@ std::array<short, konst::sqr_sz> prune(
 std::array<short, konst::sqr_sz> initialize_candidates(
     std::array<short, konst::sqr_sz> board)
 {
-    for (short i = 0; i < konst::sqr_sz; i++)
+    for (short i = 0; i < konst::sqr_sz; ++i)
     {
         if (board[i] == 0)
         {
@@ -38,7 +38,7 @@ generate candidate board
 std::array<short, konst::sqr_sz> set_can(
     std::array<short, konst::sqr_sz> board)
 {
-    for (short i = 0; i < konst::sqr_sz; i++)
+    for (short i = 0; i < konst::sqr_sz; ++i)
     {
         if (board[i] >= 0)
         {
@@ -99,7 +99,7 @@ init blank board;
 std::array<short, konst::sqr_sz> init_blank()
 {
     std::array<short, konst::sqr_sz> board{};
-    for (short i = 0; i < konst::sqr_sz; i++)
+    for (short i = 0; i < konst::sqr_sz; ++i)
     {
         board[i] = 0;
     }

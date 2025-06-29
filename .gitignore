@@ -1,7 +1,3 @@
-build/pdk.exe
-build/CMakeFiles/pdk.dir/eval_utils.cpp.obj
-build/CMakeFiles/pdk.dir/objects.a
-build/Testing/TAG
 solver\out\build\x64-Debug
 solver\.cache\clangd\index
 solver\build

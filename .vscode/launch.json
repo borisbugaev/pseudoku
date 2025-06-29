@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/pdk.exe",
-            "args": ["test_board.txt"],
+            "args": ["ez_board.txt"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/solver",
             "environment": [],

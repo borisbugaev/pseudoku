@@ -195,12 +195,13 @@ std::array<short, konst::sqr_sz> cull_square_from_row(
     short subscript_to_preserve)
 {
     // this is certainly incorrect. I will figure out why later.
-    short start{static_cast<short>((subscript_to_preserve == sqr_sub_id::row_a) ? sqr_sub_id::row_a : 0)};
-    short end{static_cast<short>((subscript_to_preserve == sqr_sub_id::row_c) ? sqr_sub_id::row_a : 0)};
-    for (short i = square_number + start; i < square_number + konst::rt_sz - end; ++i)
+    const short start{static_cast<short>((subscript_to_preserve == sqr_sub_id::row_a) ? sqr_sub_id::row_a : 0)};
+    const short end{static_cast<short>((subscript_to_preserve == sqr_sub_id::row_c) ? sqr_sub_id::row_a : 0)};
+    const short sqn{static_cast<short>(square_number * konst::sz)};
+    for (short i = sqn + start; i < sqn + konst::rt_sz - end; ++i)
     {
         if (subscript_to_preserve == sqr_sub_id::row_b 
-            && i == (square_number + start + sqr_sub_id::row_b))
+            && i == (sqn + start + sqr_sub_id::row_b))
         {
             i += konst::rt_sz;
             continue;
@@ -262,7 +263,8 @@ short square_subset_get(
     return square_set;
 }
 
-// un tested
+// if all instances of a candidate in a row are within a single square, remove that candidate
+// from indices in the square which are not in the row
 std::array<short, konst::sqr_sz> prune_squares_by_rows(
     std::array<short, konst::sqr_sz> board)
 {
@@ -315,7 +317,7 @@ std::array<short, konst::sqr_sz> prune_squares_by_rows(
             short value{get_1st_mapped_short(temp_xset)};
             board = cull_square_from_row(board, square_number, value,subrow);
             temp_xset &= ~value;
-            x_sqr_id &= ~square_to_cull;
+            x_sqr_id &= ~get_1st_mapped_short(x_sqr_id);
         }
         // get square subsets for given row
         // comparison....

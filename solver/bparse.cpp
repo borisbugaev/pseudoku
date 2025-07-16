@@ -22,7 +22,8 @@ calc row of index
 */
 constexpr unsigned char my_row(unsigned char locale)
 {
-    unsigned char offset_f{0};
+    unsigned char offset_f
+        {0};
     switch (my_square(locale))
     {
         case 1:
@@ -49,7 +50,8 @@ calc column of index
 */
 constexpr unsigned char my_col(unsigned char locale)
 {
-    unsigned char offset_f{0};
+    unsigned char offset_f
+        {0};
     switch (my_square(locale))
     {
         case 3:
@@ -78,8 +80,10 @@ calc set of int in given row
 short set_parse_row(std::array<short, konst::sqr_sz> board, 
     unsigned char row)
 {
-    short set_row{0x0};
-    long row_start{row * konst::rt_sz};
+    short set_row
+        {0x0};
+    long row_start
+        {row * konst::rt_sz};
     long row_indices[konst::sz]
     {   
         row_start,
@@ -105,12 +109,18 @@ calc set of int in given column
 short set_parse_col(std::array<short, konst::sqr_sz> board, 
     unsigned char col)
 {
-    short set_col{0x0};
-    long col_start{col/konst::rt_sz * 24 + col};
-    long col_end{konst::sz * konst::rt_sz + col_start};
+    short set_col
+        {0x0};
+    long col_start
+        {col/konst::rt_sz * 24 + col};
+    long col_end
+        {konst::sz * konst::rt_sz + col_start};
     for (long i = col_start; i < col_end; i += konst::rt_sz)
     {
-        short board_item{static_cast<short>(board[i] < 0 ? std::abs(board[i]) : 0)};
+        short board_item
+            {static_cast<short>
+                (board[i] < 0 ? std::abs(board[i]) : 0)
+            };
         set_col |= (1 << (board_item - 1));
     }
     return set_col;
@@ -122,12 +132,18 @@ calc set of int in given square
 short set_parse_sqr(std::array<short, konst::sqr_sz> board, 
     unsigned char sqr)
 {
-    short set_sqr{0x0};
-    long start_sqr{sqr * konst::sz};
-    long end_sqr{start_sqr + konst::sz};
+    short set_sqr
+        {0x0};
+    long start_sqr
+        {sqr * konst::sz};
+    long end_sqr
+        {start_sqr + konst::sz};
     for (long i = start_sqr; i < end_sqr; ++i)
     {
-        short board_item{static_cast<short>(board[i] < 0 ? std::abs(board[i]) : 0)};
+        short board_item
+            {static_cast<short>
+                (board[i] < 0 ? std::abs(board[i]) : 0)
+            };
         set_sqr |= (1 << (board_item - 1));
     }
     return set_sqr;
@@ -139,7 +155,8 @@ calc valid values at given index
 short candidates(unsigned char locale, 
     std::array<short, konst::sqr_sz> board)
 {
-    short can{board[locale]};
+    short can
+        {board[locale]};
     return can 
     & ~set_parse_col(board, my_col(locale)) 
     & ~set_parse_row(board, my_row(locale))

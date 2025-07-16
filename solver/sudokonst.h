@@ -9,61 +9,96 @@ sudoku constants in a shared header
 
 namespace konst
 {
-    constexpr unsigned char sz{9}; // must be a square number
-    constexpr unsigned char sqr_sz{81}; // sz squared
-    constexpr unsigned char rt_sz{3};
-    constexpr unsigned char th_sz{27}; // cube of sqrt(sz) aka threehalf power of sz
+    constexpr unsigned char sz
+        {9}; // must be a square number
+    constexpr unsigned char sqr_sz
+        {81}; // sz squared
+    constexpr unsigned char rt_sz
+        {3};
+    constexpr unsigned char th_sz
+        {27}; // cube of sqrt(sz) aka threehalf power of sz
 }
 
 namespace pseud
 {
-    const std::string prompt{"Pseudoku>"};
-    const std::string candidate_prompt{prompt + ".candidate"};
-    const std::string hint{"For Commands List use ?\n"};
-    const std::string sqr_x_brdr{"------x-------x------"};
-    const std::string mv_up{"\x1b[1A"};
-    const std::string clr{"\x1b[2K"};
+    const std::string prompt
+        {"Pseudoku>"};
+    const std::string candidate_prompt
+        {prompt + ".candidate"};
+    const std::string hint
+        {"For Commands List use ?\n"};
+    const std::string sqr_x_brdr
+        {"------x-------x------"};
+    const std::string mv_up
+        {"\x1b[1A"};
+    const std::string clr
+        {"\x1b[2K"};
 }
 
 namespace komm
 {
-    const std::string usr_open{"open"};
-    const std::string usr_exit{"exit"};
-    const std::string usr_help{"?"};
-    const std::string usr_ref{"reference"};
-    const std::string usr_step{"step"}; //get next val +=
-    const std::string usr_next{"next"}; //return val & loc
-    const std::string usr_insr{"insert"};
-    const std::string usr_fin{"solve"};
-    const std::string usr_srch{"search"};
-    const std::string usr_bexp{"export"};
-    const std::string usr_bimp{"import"};
+    const std::string usr_open
+        {"open"};
+    const std::string usr_exit
+        {"exit"};
+    const std::string usr_help
+        {"?"};
+    const std::string usr_ref
+        {"reference"};
+    const std::string usr_step
+        {"step"}; //get next val +=
+    const std::string usr_next
+        {"next"}; //return val & loc
+    const std::string usr_insr
+        {"insert"};
+    const std::string usr_fin
+        {"solve"};
+    const std::string usr_srch
+        {"search"};
+    const std::string usr_bexp
+        {"export"};
+    const std::string usr_bimp
+        {"import"};
 
     /*
     commands primarily used for debugging, etc
     */
-    const std::string usr_solo{"solo"};
-    const std::string usr_draw{"draw"};
-    const std::string usr_col{"column"};
-    const std::string usr_row{"row"};
-    const std::string usr_sqr{"square"};
-    const std::string usr_cdrw{"cdraw"};
-    const std::string usr_try{"debug"};
+    const std::string usr_solo
+        {"solo"};
+    const std::string usr_draw
+        {"draw"};
+    const std::string usr_col
+        {"column"};
+    const std::string usr_row
+        {"row"};
+    const std::string usr_sqr
+        {"square"};
+    const std::string usr_cdrw
+        {"cdraw"};
+    const std::string usr_try
+        {"debug"};
 }
 
 namespace sqr_sub_id
 {
-    constexpr short col_3{0};
-    constexpr short col_2{1};
-    constexpr short col_1{2};
-    constexpr short row_a{3};
-    constexpr short row_b{4};
-    constexpr short row_c{5};
+    constexpr short col_1
+        {0};
+    constexpr short col_2
+        {1};
+    constexpr short col_3
+        {2};
+    constexpr short row_a
+        {3};
+    constexpr short row_b
+        {4};
+    constexpr short row_c
+        {5};
 }
 
 namespace algae
 {
-    const std::array<std::string, konst::sqr_sz> to{
+    const std::array<std::string, konst::sqr_sz> to
+    {
         "a9","a8","a7",
         "b9","b8","b7",
         "c9","c8","c7",
@@ -217,7 +252,8 @@ namespace tra
 }
 
 #ifdef DEBUG
-constexpr std::array<unsigned short, konst::bs> sref{
+constexpr std::array<unsigned short, konst::bs> sref
+{
     4, 3, 1, 9, 6, 2, 8, 7, 5, 
     6, 2, 7, 5, 4, 9, 1, 8, 3, 
     2, 1, 6, 3, 9, 8, 7, 5, 4, 

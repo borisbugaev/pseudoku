@@ -42,7 +42,8 @@ void draw_help_dialog()
 std::string value_str(
     short value)
 {
-    std::string my_value{};
+    std::string my_value
+        {};
     short my_s_value = value < 0 ? -value : 0;
     if (my_s_value)
     {
@@ -58,7 +59,8 @@ std::string value_str(
 std::string can_value_str(
     short value)
 {
-    std::string my_value{};
+    std::string my_value
+        {};
     short my_s_value = value < 0 ? 0 : value;
     if (my_s_value)
     {
@@ -76,7 +78,8 @@ std::string can_board_ln(
     unsigned short index, 
     char flag)
 {
-    std::string my_line{can_value_str(board[index]) 
+    std::string my_line
+        { can_value_str(board[index]) 
         + ' '
         + can_value_str(board[index + 1])
         + ' '
@@ -103,7 +106,8 @@ std::string can_board_ln(
         }
         case 'a':
         {
-            const char i_c{(char)(index/3 + 'a')};
+            const char i_c
+                {(char)(index/3 + 'a')};
             my_line.insert(0, 1, '|');
             my_line.insert(0, 1, i_c);
             my_line.append(1, '|');
@@ -126,7 +130,8 @@ std::string board_line(
     unsigned short index, 
     char flag)
 {
-    std::string my_line{value_str(board[index]) 
+    std::string my_line
+        { value_str(board[index]) 
         + ' '
         + value_str(board[index + 1])
         + ' '
@@ -153,7 +158,8 @@ std::string board_line(
         }
         case 'a':
         {
-            const char i_c{(char)(index/3 + 'a')};
+            const char i_c
+                {(char)(index/3 + 'a')};
             my_line.insert(0, 1, '|');
             my_line.insert(0, 1, i_c);
             my_line.append(1, '|');

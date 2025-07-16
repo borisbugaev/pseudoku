@@ -46,7 +46,8 @@ bool input_in_range(
 {
     for (short i = '1'; i <= '1' + konst::sz; i++)
     {
-        std::string val{(char)i};
+        std::string val
+            {(char)i};
         if (input.compare(val))
         {
             return true;
@@ -80,7 +81,8 @@ std::array<short, konst::sqr_sz> kommand(
         // request insertion location
         // request insertion value
         // insert value into board
-        std::string inputstr{};
+        std::string inputstr
+            {};
         std::cout << "Location: ";
         std::cin >> inputstr;
         const short loc = alg_map::u.at(inputstr);
@@ -138,7 +140,8 @@ std::array<short, konst::sqr_sz> kommand(
     }
     else if (input.compare(komm::usr_srch) == 0)
     {
-        std::string inputstr{};
+        std::string inputstr
+            {};
         std::cout << "Search at index...";
         std::cin >> inputstr;
         if (input_in_range(inputstr))
@@ -160,7 +163,8 @@ std::array<short, konst::sqr_sz> kommand(
     }
     else if (input.compare(komm::usr_col) == 0)
     {
-        std::string inputstr{};
+        std::string inputstr
+            {};
         std::cout << "Search Column...";
         std::cin >> inputstr;
         if (inputstr.compare(komm::usr_fin) == 0)
@@ -179,7 +183,8 @@ std::array<short, konst::sqr_sz> kommand(
     }
     else if (input.compare(komm::usr_row) == 0)
     {
-        std::string inputstr{};
+        std::string inputstr
+            {};
         std::cout << "Search row...";
         std::cin >> inputstr;
         if (inputstr.compare(komm::usr_fin) == 0)
@@ -198,7 +203,8 @@ std::array<short, konst::sqr_sz> kommand(
     }
     else if (input.compare(komm::usr_sqr) == 0)
     {
-        std::string inputstr{};
+        std::string inputstr
+            {};
         std::cout << "Search square...";
         std::cin >> inputstr;
         if (inputstr.compare(komm::usr_fin) == 0)
@@ -217,7 +223,8 @@ std::array<short, konst::sqr_sz> kommand(
     }
     else if (input.compare(komm::usr_open) == 0)
     {
-        std::string inputstr{};
+        std::string inputstr
+            {};
         std::cout << "Filename...";
         std::cin >> inputstr;
         board = init_from_file(inputstr);
@@ -229,14 +236,16 @@ std::array<short, konst::sqr_sz> kommand(
     }
     else if (input.compare(komm::usr_bexp) == 0)
     {
-        std::string inputstr{};
+        std::string inputstr
+            {};
         std::cout << "Output Filename...";
         std::cin >> inputstr;
         short out_file{board_export(board, inputstr)};
     }
     else if (input.compare(komm::usr_bimp) == 0)
     {
-        std::string inputstr{};
+        std::string inputstr
+            {};
         std::cout << "Input Filename...";
         std::cin >> inputstr;
         auto iboard = board_import(inputstr);
@@ -248,11 +257,13 @@ std::array<short, konst::sqr_sz> kommand(
     }
     else if (input.compare("debug") == 0)
     {
-        char inputchar{};
+        char inputchar
+            {};
         std::cout << "...";
         std::cin >> inputchar;
         std::array<short, konst::sqr_sz> trialboard;
-        bool am_debug{true};
+        bool am_debug
+            {true};
         while (am_debug)
         {
             switch (inputchar)
@@ -280,7 +291,8 @@ std::array<short, konst::sqr_sz> kommand(
                 }
                 case 'q': // difference
                 {
-                    bool equality{board == trialboard};
+                    bool equality
+                        {board == trialboard};
                     std::cout << equality;
                     break;
                 }

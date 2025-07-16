@@ -3,9 +3,12 @@
 #include <iostream>
 #include <string>
 
-const int EXP_ARGC{2};
-const std::string EXP_ARGSV[EXP_ARGC]{"SELF", "INPUT FILE"};
-const std::string ARG_TYPE{"ENTER NAME OF "};
+const int EXP_ARGC
+    {2};
+const std::string EXP_ARGSV[EXP_ARGC]
+    {"SELF", "INPUT FILE"};
+const std::string ARG_TYPE
+    {"ENTER NAME OF "};
 
 std::array<short, konst::sqr_sz> kommand(
     std::string input, 
@@ -45,8 +48,10 @@ int main(int argc, char** argv)
     board = initialize_candidates(board);
     board = set_can(board);
     std::array<short, konst::sqr_sz> tboard;
-    bool usr_quit{false};
-    std::string inputstr{};
+    bool usr_quit
+        {false};
+    std::string inputstr
+        {};
     std::cout << pseud::hint;
     std::cout << pseud::prompt;
     std::cin >> inputstr;

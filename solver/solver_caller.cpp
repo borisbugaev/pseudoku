@@ -26,8 +26,12 @@ std::array<short, konst::sqr_sz> solve_board(
     std::array<short, konst::sqr_sz> board)
 {
     auto start = std::chrono::steady_clock::now();
-    short counter{0}, c_i{0};
-    bool blank{blank_check(board)};
+    short counter
+        {0},
+    c_i
+        {0};
+    bool blank
+        {blank_check(board)};
     std::array<short, konst::sqr_sz> temp_b;
     while (blank == true)
     {

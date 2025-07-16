@@ -97,7 +97,10 @@ short set_parse_row(std::array<short, konst::sqr_sz> board,
         row_start + konst::th_sz * 2 + 2};
     for (short i = 0; i < konst::sz; ++i)
     {
-        short board_item{static_cast<short>(board[row_indices[i]] < 0 ? std::abs(board[row_indices[i]]) : 0)};
+        short board_item
+            {static_cast<short>
+                (board[row_indices[i]] < 0 ? std::abs(board[row_indices[i]]) : 0)
+            };
         set_row |= (1 << (board_item - 1));
     }
     return set_row;

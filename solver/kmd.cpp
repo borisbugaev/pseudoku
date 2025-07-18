@@ -26,12 +26,6 @@ short find_solo(
     std::array<short, konst::sqr_sz> board);
 std::array<short, konst::sqr_sz> try_solo_find(
     std::array<short, konst::sqr_sz> board);
-std::array<short, konst::sqr_sz> try_col_find(
-    std::array<short, konst::sqr_sz> board);
-std::array<short, konst::sqr_sz> try_sqr_find(
-    std::array<short, konst::sqr_sz> board);
-std::array<short, konst::sqr_sz> try_row_find(
-    std::array<short, konst::sqr_sz> board);
 std::array<short, konst::sqr_sz> solve_board(
     std::array<short, konst::sqr_sz> board);
 short set_xor_search(
@@ -40,6 +34,9 @@ short set_xor_search(
     char type);
 std::array<short, konst::sqr_sz> board_import(
     std::string filename);
+std::array<short, konst::sqr_sz> try_generic_find(
+    std::array<short, konst::sqr_sz> board,
+    char type);
 
 bool input_in_range(
     std::string input)
@@ -169,7 +166,7 @@ std::array<short, konst::sqr_sz> kommand(
         std::cin >> inputstr;
         if (inputstr.compare(komm::usr_fin) == 0)
         {
-            return try_col_find(board);
+            return try_generic_find(board, 'c');
         }
         else if (input_in_range(inputstr))
         {
@@ -189,7 +186,7 @@ std::array<short, konst::sqr_sz> kommand(
         std::cin >> inputstr;
         if (inputstr.compare(komm::usr_fin) == 0)
         {
-            return try_row_find(board);
+            return try_generic_find(board, 'r');
         }
         else if (input_in_range(inputstr))
         {
@@ -209,7 +206,7 @@ std::array<short, konst::sqr_sz> kommand(
         std::cin >> inputstr;
         if (inputstr.compare(komm::usr_fin) == 0)
         {
-            return try_sqr_find(board);
+            return try_generic_find(board, 's');
         }
         else if (input_in_range(inputstr))
         {
@@ -261,26 +258,30 @@ std::array<short, konst::sqr_sz> kommand(
             {};
         std::cout << "...";
         std::cin >> inputchar;
-        std::array<short, konst::sqr_sz> trialboard;
+        std::array<short, konst::sqr_sz> trial_A;
+        std::array<short, konst::sqr_sz> trial_B;
+        std::array<short, konst::sqr_sz> trial_C;
         bool am_debug
             {true};
+        char prev_input
+            {};
         while (am_debug)
         {
             switch (inputchar)
             {
-                case 'r': // generate trialboard based on row pruning
+                case 'r':
                 {
-                    trialboard = prune_squares_by_rows(board);
+                    trial_A = prune_squares_by_rows(board);
                     break;
                 }
                 case 'd': // draw differences between board and trialboard
                 {
-                    draw_differences(board, trialboard);
+                    draw_differences(board, trial_A);
                     break;
                 }
                 case 't': // draw trialboard
                 {
-                    draw_board(trialboard);
+                    draw_board(trial_A);
                     break;
                 }
                 case 'e': // end
@@ -292,13 +293,13 @@ std::array<short, konst::sqr_sz> kommand(
                 case 'q': // difference
                 {
                     bool equality
-                        {board == trialboard};
+                        {board == trial_A};
                     std::cout << equality;
                     break;
                 }
                 case 's': // set trial to board
                 {
-                    board = trialboard;
+                    board = trial_A;
                     break;
                 }
             }

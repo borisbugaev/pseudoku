@@ -17,6 +17,8 @@ namespace konst
         {3};
     constexpr unsigned char th_sz
         {27}; // cube of sqrt(sz) aka threehalf power of sz
+    const std::array<short, 0x3> types
+        {'c', 'r', 's'};
 }
 
 namespace pseud

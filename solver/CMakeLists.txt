@@ -12,5 +12,6 @@ add_executable(
     draw.cpp 
     eval_utils.cpp
     solver_caller.cpp
+    general_utils.cxx
     sudokonst.h)
 

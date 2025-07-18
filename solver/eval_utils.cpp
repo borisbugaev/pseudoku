@@ -86,54 +86,6 @@ short set_xor_search(
     return my_xor;
 }
 
-short set_xor_search(
-    std::array<short, konst::sqr_sz> board,
-    short start,
-    char type)
-{
-    short add_only_set
-        {0x0},
-    my_set
-        {0x0};
-    const short i_col
-        {konst::rt_sz},
-    i_els
-        {0x1},
-    f_row
-        {0x0};
-    const short by
-        {(type == 'c')
-            ? i_col : i_els
-        };
-    const short from
-        {(type == 'r')
-            ? f_row : start
-        };
-    const short buf
-        {(type == 'c')
-            ? konst::th_sz : konst::sz
-        };
-    const short to
-        {static_cast<short>
-            (from + buf)
-        };
-    for (short i = from; i < to; i+=by)
-    {
-        const short j
-            {(type == 'r') 
-                ? grp(start, i) : i
-            };
-        const short cn_at_j
-            {static_cast<short>
-                (board[j] >= 0 
-                    ? board[j] : 0)
-            };
-        add_only_set |= my_set & cn_at_j;
-        my_set ^= cn_at_j;
-    }
-    return my_set & ~add_only_set; //n-input 'true' xor
-}
-
 std::array<short, 0x2> generic_find(
     std::array<short, konst::sqr_sz> board,
     char type)
@@ -153,59 +105,6 @@ std::array<short, 0x2> generic_find(
         }
         set = 0x0;
         sub_range_index++;
-    }
-    return UNDEF_TPL;
-}
-
-std::array<short, 0x2> sqr_find(
-    std::array<short, konst::sqr_sz> board)
-{
-    short sqr_set
-        {0x0};
-    for (short i = 0; i < konst::sqr_sz; i += konst::sz)
-    {
-        sqr_set = set_xor_search(board, i, 's');
-        if (sqr_set != 0)
-        {
-            return {get_1st_mapped_short(sqr_set), i};
-        }
-        sqr_set = 0x0;
-    }
-    return UNDEF_TPL;
-}
-
-std::array<short, 0x2> row_find(
-    std::array<short, konst::sqr_sz> board)
-{
-    short row_set
-        {0x0};
-    for (short i = 0; i < konst::th_sz; i += konst::rt_sz)
-    {
-        row_set = set_xor_search(board, i, 'r');
-        if (row_set)
-        {
-            return {get_1st_mapped_short(row_set), i};
-        }
-        row_set = 0x0;
-    }
-    return UNDEF_TPL;
-}
-
-std::array<short, 0x2> col_find(
-    std::array<short, konst::sqr_sz> board)
-{
-    short col_set
-        {0x0},
-    j{};
-    for (short i = 0; i < konst::sz; ++i)
-    {
-        j = grp(0, i);
-        col_set = set_xor_search(board, j, 'c');
-        if (col_set)
-        {
-            return {get_1st_mapped_short(col_set), j};
-        }
-        col_set = 0x0;
     }
     return UNDEF_TPL;
 }

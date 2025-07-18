@@ -99,7 +99,7 @@ std::vector<short> range_over_row(
 {
     std::vector<short> range_vec
         {};
-    row_id *= 3;
+    row_id *= konst::rt_sz;
     for (short i = 0; i < konst::sz; ++i)
     {
         range_vec.push_back(grp(row_id, i));

@@ -362,143 +362,84 @@ std::array<short, konst::sqr_sz> prune_squares_by_rows(
     return board;
 }
 
-std::array<short, konst::sqr_sz> sqr_prune(
-    std::array<short, konst::sqr_sz> board)
+short get_candidate_pair(
+    std::array<short, konst::sqr_sz> board,
+    std::vector<short> range)
 {
     short candidate_pair
         {0x0};
-    for (short i = 0; i < konst::sqr_sz; i += konst::sz)
+    for (short index : range)
     {
-        for (short j = 0; j < konst::sz; ++j)
+        if (board[index] <= 0)
         {
-            if (board[i+j] <= 0)
-            {
-                continue;
-            }
-            else if (high_bit_count(board[i+j], 2))
-            {
-                for (short k = j + 1; k < konst::sz; ++k)
-                {
-                    candidate_pair = board[i+j] == board[i+k] ? board[i+j] : candidate_pair;
-                }
-            }
+            continue;
         }
-        if (high_bit_count(candidate_pair, 2))
+        else if (high_bit_count(board[index], 2))
         {
-            for (short j = 0; j < konst::sz; ++j)
+            for (short index_2 : range)
             {
-                if (board[i+j] <= 0)
+                if (index == index_2)
                 {
                     continue;
                 }
-                else if (board[i+j] != candidate_pair && high_bit_count(board[i+j]) > 1)
+                else
                 {
-                    board[i+j] &= ~candidate_pair;
+                    candidate_pair = board[index] == board[index_2]
+                        ? board[index] : candidate_pair;
                 }
             }
         }
-        candidate_pair = 0x0;
-        // if 2 squares each have 2 candidates
-        // and those 2 candidates are the same
-        // then remove those candidates from all other candidate sets
+    }
+    return candidate_pair;
+}
+
+std::array<short, konst::sqr_sz> prune_extraneous(
+    std::array<short, konst::sqr_sz> board,
+    std::vector<short> range,
+    short candidate_pair)
+{
+    for (short index : range)
+    {
+        if (board[index] <= 0)
+        {
+            continue;
+        }
+        else if (board[index] != candidate_pair
+            && high_bit_count(board[index]) > 1)
+        {
+            board[index] &= ~candidate_pair;
+        }
     }
     return board;
 }
 
-std::array<short, konst::sqr_sz> row_prune(
-    std::array<short, konst::sqr_sz> board)
+std::array<short, konst::sqr_sz> generic_prune(
+    std::array<short, konst::sqr_sz> board,
+    char type)
 {
     short candidate_pair
         {0x0};
-    for (short i = 0; i < konst::th_sz; i += konst::rt_sz)
+    std::vector<std::vector<short>> ranges
+        {ranges_vec_create(type)};
+    for (std::vector<short> range : ranges)
     {
-       for (short j = 0; j < konst::sz; ++j)
-       {
-            const short r_1
-                {grp(i, j)};
-            if (board[r_1] <= 0)
-            {
-                continue;
-            }
-            else if (high_bit_count(board[r_1], 2))
-            {
-                for (short k = j + 1; k < konst::sz; ++k)
-                {
-                    const short r_2
-                        {grp(i, k)};
-                    candidate_pair = board[r_1] == board[r_2] ? board[r_1] : candidate_pair;
-                }
-            }
-       }
+        candidate_pair = get_candidate_pair(board, range);
         if (high_bit_count(candidate_pair, 2))
         {
-            for (short j = 0; j < konst::sz; ++j)
-            {
-                const short r
-                    {grp(i, j)};
-                if (board[r] <= 0)
-                {
-                    continue;
-                }
-                else if (board[r] != candidate_pair && high_bit_count(board[r]) > 1)
-                {
-                    board[r] &= ~candidate_pair;
-                }
-            }
-        }
-       candidate_pair = 0x0;
-    }
-    return board;
-}
-
-std::array<short, konst::sqr_sz> col_prune(
-    std::array<short, konst::sqr_sz> board)
-{
-    short candidate_pair
-        {0x0};
-    for (short i = 0; i < konst::sz; i++)
-    {
-        const short r
-            {grp(0, i)};
-        for (short j = r; j < r + konst::th_sz; j += konst::rt_sz)
-        {
-            if (board[j] <= 0)
-            {
-                continue;
-            }
-            else if (high_bit_count(board[j], 2))
-            {
-                for (short k = (j + konst::rt_sz); k < r + konst::th_sz; k += konst::rt_sz)
-                {
-                    candidate_pair = board[j] == board[k] ? board[j] : candidate_pair;
-                }
-            }
-        }
-        if (high_bit_count(candidate_pair, 2))
-        {
-            for (short j = r; j < r + konst::th_sz; j += konst::rt_sz)
-            {
-                if (board[j] <= 0)
-                {
-                    continue;
-                }
-                else if (board[j] != candidate_pair && high_bit_count(board[j]) > 1)
-                {
-                    board[j] &= ~candidate_pair;
-                }
-            }
+            board = prune_extraneous(board, range, candidate_pair);
         }
         candidate_pair = 0x0;
-    }
+    } 
     return board;
 }
 
 std::array<short, konst::sqr_sz> prune(
     std::array<short, konst::sqr_sz> board)
 {
-    board = sqr_prune(board);
-    board = row_prune(board);
-    board = col_prune(board);
+    for (char type : konst::types)
+    {
+        board = generic_prune(board, type);
+    }
     return board;
 }
 

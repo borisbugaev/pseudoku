@@ -53,7 +53,8 @@ short find_solo(
 {
     for (short i = 0; i < konst::sqr_sz; ++i)
     {
-        if ((board[i] & (board[i] - 1)) == 0 && board[i] > 0)
+        if ((board[i] & (board[i] - 1)) == 0
+            && board[i] > 0)
         {
             return i;
         }

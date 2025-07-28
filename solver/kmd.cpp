@@ -38,7 +38,7 @@ std::array<short, konst::sqr_sz> try_generic_find(
     std::array<short, konst::sqr_sz> board,
     char type);
 
-bool input_in_range(
+bool input_valid(
     std::string input)
 {
     for (short i = '1'; i <= '1' + konst::sz; i++)
@@ -85,7 +85,7 @@ std::array<short, konst::sqr_sz> kommand(
         const short loc = alg_map::u.at(inputstr);
         std::cout << "Value: ";
         std::cin >> inputstr;
-        if (input_in_range(inputstr))
+        if (input_valid(inputstr))
         {
             const short val = std::stoi(inputstr);
             board[loc] = val;
@@ -141,7 +141,7 @@ std::array<short, konst::sqr_sz> kommand(
             {};
         std::cout << "Search at index...";
         std::cin >> inputstr;
-        if (input_in_range(inputstr))
+        if (input_valid(inputstr))
         {
             short searchfor = alg_map::u.at(inputstr);
             std::cout << pseud::mv_up << pseud::clr;
@@ -168,7 +168,7 @@ std::array<short, konst::sqr_sz> kommand(
         {
             return try_generic_find(board, 'c');
         }
-        else if (input_in_range(inputstr))
+        else if (input_valid(inputstr))
         {
             short searchfor = std::stoi(inputstr);
             draw_candidates(set_xor_search(board, searchfor, 'c'));
@@ -188,7 +188,7 @@ std::array<short, konst::sqr_sz> kommand(
         {
             return try_generic_find(board, 'r');
         }
-        else if (input_in_range(inputstr))
+        else if (input_valid(inputstr))
         {
             short searchfor = std::stoi(inputstr);
             draw_candidates(set_xor_search(board, searchfor, 'r'));
@@ -208,7 +208,7 @@ std::array<short, konst::sqr_sz> kommand(
         {
             return try_generic_find(board, 's');
         }
-        else if (input_in_range(inputstr))
+        else if (input_valid(inputstr))
         {
             short searchfor = std::stoi(inputstr);
             draw_candidates(set_xor_search(board, searchfor, 's'));

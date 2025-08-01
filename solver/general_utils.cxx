@@ -1,5 +1,6 @@
 #include "sudokonst.h"
 #include <array>
+#include <climits>
 #include <vector>
 //#define DEBUG
 #ifdef DEBUG
@@ -116,6 +117,27 @@ std::vector<std::vector<short>> ranges_over_rows()
         ranges_vec.push_back(range_over_row(i));
     }
     return ranges_vec;
+}
+
+std::vector<short> range_over(
+    short bits)
+{
+    std::vector<short> my_range
+        {};
+    const unsigned short start
+        {0};
+    const unsigned short end
+        {USHRT_MAX};
+    for (unsigned short p = start;
+        p < end;
+        p = 1 << p)
+    {
+        if (p & bits)
+        {
+            my_range.push_back(equiv(p));
+        }
+    }
+    return my_range; 
 }
 
 std::vector<short> range_vec_create(
@@ -241,4 +263,21 @@ std::vector<std::vector<short>> ranges_vec_create(
         }
     }
     return ranges_vec;
+}
+
+short get_candidate_set(
+    std::array<short, konst::sqr_sz> board,
+    std::vector<short> range_set)
+{
+    short candidate_set
+        {0x0};
+    for (short index : range_set)
+    {
+        if (board[index] < 0)
+        {
+            continue;
+        }
+        candidate_set &= board[index];
+    }
+    return candidate_set;
 }

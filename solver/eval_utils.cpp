@@ -38,6 +38,11 @@ std::vector<short> range_vec_create(
     short start,
     short end,
     short step);
+std::vector<short> range_over(
+    short bits);
+short get_candidate_set(
+    std::array<short, konst::sqr_sz> board,
+    std::vector<short> range_set);
 
 const short UNDEF
     {-1};
